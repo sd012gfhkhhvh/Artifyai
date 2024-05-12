@@ -8,7 +8,7 @@ import { usePathname } from 'next/navigation'
 import { Button } from '../ui/button'
 
 const Sidebar = () => {
-  const pathname = usePathname();
+  const pathname = usePathname(); // gives the current pathname
 
   return (
     <aside className="sidebar">
@@ -21,7 +21,7 @@ const Sidebar = () => {
           <SignedIn>
             <ul className="sidebar-nav_elements">
               {navLinks.slice(0, 6).map((link) => {
-                const isActive = link.route === pathname
+                const isActive = (link.route === pathname)
 
                 return (
                   <li key={link.route} className={`sidebar-nav_element group ${
@@ -65,8 +65,8 @@ const Sidebar = () => {
                 )
               })}
 
-              <li className="flex-center cursor-pointer gap-2 p-4">
-                <UserButton afterSignOutUrl='/' showName />
+              <li className="flex-center py-4 px-2">
+                <UserButton afterSignOutUrl='/' showName/>
               </li>
             </ul>
           </SignedIn>
