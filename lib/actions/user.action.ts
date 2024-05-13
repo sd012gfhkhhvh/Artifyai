@@ -8,6 +8,9 @@ import { handleError } from '../utils';
 export async function createUser(user: CreateUserParams) {
   try {
     //zod validation
+    // console.log("createUser_action: ");
+    // console.log(JSON.stringify(user));
+
     const { clerkId, email, username, firstName, lastName, photo } = user;
 
     const newUser = await prisma.user.create({

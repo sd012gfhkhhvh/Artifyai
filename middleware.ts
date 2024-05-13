@@ -1,5 +1,7 @@
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 
+// Returns a function that accepts a Request object and returns whether the request matches 
+// the list of predefined routes that can be passed in as the first argument.
 const isProtectedRoute = createRouteMatcher([
   '/profile(.*)',
   '/credits(.*)',
