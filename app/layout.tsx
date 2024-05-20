@@ -4,6 +4,7 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 
 import { cn } from '@/lib/utils';
+import { Toaster } from '@/components/ui/toaster';
 
 //providers
 import Providers from '@/lib/providers';
@@ -37,6 +38,7 @@ export default function RootLayout({
         )}
       >
         <Providers>{children}</Providers>
+        <Toaster />
       </body>
     </html>
   );

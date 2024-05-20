@@ -3,6 +3,8 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { useEffect, useState, useTransition } from 'react';
+import { useRouter } from 'next/navigation';
 
 import {
   Select,
@@ -11,26 +13,25 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+
 import {
   aspectRatioOptions,
   creditFee,
   defaultValues,
   transformationTypes,
 } from '@/constants';
+
 import { CustomField } from './CustomField';
-import { useEffect, useState, useTransition } from 'react';
 import { AspectRatioKey, debounce, deepMergeObjects } from '@/lib/utils';
-// import MediaUploader from "./MediaUploader"
-// import TransformedImage from "./TransformedImage"
-// import { updateCredits } from "@/lib/actions/user.actions"
-// import { getCldImageUrl } from "next-cloudinary"
-// import { addImage, updateImage } from "@/lib/actions/image.actions"
-import { useRouter } from 'next/navigation';
 import { updateCredits } from '@/lib/actions/user.action';
+import MediaUploader from './MediaUploader';
+import TransformedImage from './TransformedImage';
+import { useToast } from '../ui/use-toast';
+import { addImage, updateImage } from '@/lib/actions/image.action';
+import { getCldImageUrl } from 'next-cloudinary';
 // import { InsufficientCreditsModal } from "./InsufficientCreditsModal"
 
 export const formSchema = z.object({
@@ -59,6 +60,8 @@ const TransformationForm = ({
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
+  const { toast } = useToast();
+
   const initialValues =
     data && action === 'Update'
       ? {
@@ -80,70 +83,74 @@ const TransformationForm = ({
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
 
-    // if(data || image) {
-    //   const transformationUrl = getCldImageUrl({
-    //     width: image?.width,
-    //     height: image?.height,
-    //     src: image?.publicId,
-    //     ...transformationConfig
-    //   })
+    if (data || image) {
+      const transformationUrl = getCldImageUrl({
+        width: image?.width,
+        height: image?.height,
+        src: image?.publicId,
+        ...transformationConfig,
+      });
 
-    //   const imageData = {
-    //     title: values.title,
-    //     publicId: image?.publicId,
-    //     transformationType: type,
-    //     width: image?.width,
-    //     height: image?.height,
-    //     config: transformationConfig,
-    //     secureURL: image?.secureURL,
-    //     transformationURL: transformationUrl,
-    //     aspectRatio: values.aspectRatio,
-    //     prompt: values.prompt,
-    //     color: values.color,
-    //   }
+      const imageData = {
+        title: values.title,
+        publicId: image?.publicId,
+        transformationType: type,
+        width: image?.width,
+        height: image?.height,
+        config: transformationConfig,
+        secureURL: image?.secureURL,
+        transformationUrl: transformationUrl,
+        aspectRatio: values.aspectRatio,
+        prompt: values.prompt,
+        color: values.color,
+      };
 
-    //   if(action === 'Add') {
-    //     try {
-    //       const newImage = await addImage({
-    //         image: imageData,
-    //         userId,
-    //         path: '/'
-    //       })
+      if (action === 'Add') {
+        try {
+          const newImage = await addImage({
+            image: imageData,
+            userId,
+            path: '/',
+          });
 
-    //       if(newImage) {
-    //         form.reset()
-    //         setImage(data)
-    //         router.push(`/transformations/${newImage._id}`)
-    //       }
-    //     } catch (error) {
-    //       console.log(error);
-    //     }
-    //   }
+          console.log(newImage);
 
-    //   if(action === 'Update') {
-    //     try {
-    //       const updatedImage = await updateImage({
-    //         image: {
-    //           ...imageData,
-    //           _id: data._id
-    //         },
-    //         userId,
-    //         path: `/transformations/${data._id}`
-    //       })
+          toast({
+            title: 'Image saved successfully',
+            description: '1 credit was deducted from your account',
+            duration: 5000,
+            className: 'success-toast',
+          });
 
-    //       if(updatedImage) {
-    //         router.push(`/transformations/${updatedImage._id}`)
-    //       }
-    //     } catch (error) {
-    //       console.log(error);
-    //     }
-    //   }
-    // }
+          if (newImage) {
+            form.reset();
+            setImage(data);
+            router.push(`/transformations/${newImage.id}`);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
 
-    //custon delay
-    await new Promise((r) => setTimeout(r, 2000));
-    console.log(values);
+      if (action === 'Update') {
+        try {
+          const updatedImage = await updateImage({
+            image: {
+              ...imageData,
+              id: data.id,
+            },
+            userId,
+            path: `/transformations/${data.id}`,
+          });
 
+          if (updatedImage) {
+            router.push(`/transformations/${updatedImage._id}`);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    }
     setIsSubmitting(false);
   }
 
@@ -185,18 +192,19 @@ const TransformationForm = ({
   };
 
   const onTransformHandler = async () => {
-    setIsTransforming(true)
+    setIsTransforming(true);
 
     setTransformationConfig(
-      deepMergeObjects(newTransformation, transformationConfig)
-    )
+      deepMergeObjects(newTransformation, transformationConfig) //this is usefull in case of updates to avoid conflicts
+    );
 
-    setNewTransformation(null)
+    setNewTransformation(null);
+    setIsTransforming(false);
 
     startTransition(async () => {
-      await updateCredits(userId, creditFee)
-    })
-  }
+      // await updateCredits(userId, creditFee)
+    });
+  };
 
   // useEffect(() => {
   //   if(image && (type === 'restore' || type === 'removeBackground')) {
@@ -283,7 +291,7 @@ const TransformationForm = ({
                       onInputChangeHandler(
                         'color',
                         e.target.value,
-                        'recolor',
+                        type,
                         field.onChange
                       )
                     }
@@ -294,13 +302,13 @@ const TransformationForm = ({
           </div>
         )}
 
-        {/* <div className="media-uploader-field">
-          <CustomField 
+        <div className='media-uploader-field'>
+          <CustomField
             control={form.control}
-            name="publicId"
-            className="flex size-full flex-col"
+            name='publicId'
+            className='flex size-full flex-col'
             render={({ field }) => (
-              <MediaUploader 
+              <MediaUploader
                 onValueChange={field.onChange}
                 setImage={setImage}
                 publicId={field.value}
@@ -310,7 +318,7 @@ const TransformationForm = ({
             )}
           />
 
-          <TransformedImage 
+          <TransformedImage
             image={image}
             type={type}
             title={form.getValues().title}
@@ -318,7 +326,7 @@ const TransformationForm = ({
             setIsTransforming={setIsTransforming}
             transformationConfig={transformationConfig}
           />
-        </div> */}
+        </div>
 
         {/* buttons */}
         <div className='flex flex-col gap-4'>
