@@ -83,7 +83,7 @@ export async function deleteImage(imageId: string) {
 export async function getImageById(imageId: string) {
   try {
     const image = await prisma.image.findUnique({
-      relationLoadStrategy: 'join',
+      // relationLoadStrategy: 'join',
       where: {id: imageId},
       include: {
         author: {
