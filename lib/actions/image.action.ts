@@ -7,13 +7,6 @@ import { redirect } from 'next/navigation';
 
 // import { v2 as cloudinary } from 'cloudinary'
 
-// const populateUser = (query: any) =>
-//   query.populate({
-//     path: 'author',
-//     model: User,
-//     select: '_id firstName lastName clerkId',
-//   });
-
 // ADD IMAGE
 export async function addImage({ image, userId, path }: AddImageParams) {
   try {
@@ -83,7 +76,7 @@ export async function deleteImage(imageId: string) {
 export async function getImageById(imageId: string) {
   try {
     const image = await prisma.image.findUnique({
-      // relationLoadStrategy: 'join',
+      relationLoadStrategy: 'join',
       where: {id: imageId},
       include: {
         author: {
@@ -106,7 +99,7 @@ export async function getImageById(imageId: string) {
   }
 }
 
-// // GET IMAGES
+// GET IMAGES
 // export async function getAllImages({
 //   limit = 9,
 //   page = 1,

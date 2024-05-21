@@ -14,10 +14,12 @@ const ImageDetails = async ({ params: { id } }: SearchParamProps) => {
 
   const image = await getImageById(id);
 
+  console.log(image);
+  
   return (
     <>
       <Header title={image.title} />
-
+      <span>Author - {image?.author?.firstName} {image?.author?.lastName}</span>
       <section className='mt-5 flex flex-wrap gap-4'>
         <div className='p-14-medium md:p-16-medium flex gap-2'>
           <p className='text-dark-600'>Transformation:</p>
@@ -86,12 +88,12 @@ const ImageDetails = async ({ params: { id } }: SearchParamProps) => {
         {userId === image.author.clerkId && (
           <div className='mt-4 space-y-4'>
             <Button asChild type='button' className='submit-button capitalize'>
-              <Link href={`/transformations/${image._id}/update`}>
+              <Link href={`/transformations/${image.id}/update`}>
                 Update Image
               </Link>
             </Button>
 
-            <DeleteConfirmation imageId={image._id} />
+            <DeleteConfirmation imageId={image.id} />
           </div>
         )}
       </section>
