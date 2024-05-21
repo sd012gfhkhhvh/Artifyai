@@ -71,6 +71,30 @@ declare type Transformations = {
   removeBackground?: boolean;
 };
 
+// declare type IImage = {
+//   id: string;
+//   title: string;
+//   transformationType: string;
+//   publicId: string;
+//   secureURL: string;
+//   width?: number;
+//   height?: number;
+//   config?: object;
+//   transformationUrl?: string;
+//   aspectRatio?: string;
+//   color?: string;
+//   prompt?: string;
+//   authorId: string;
+//   author: {
+//     id: string;
+//     clerkId: string;
+//     firstName: string;
+//     lastName: string;
+//   };
+//   createdAt?: Date;
+//   updatedAt?: Date;
+// };
+
 // ====== TRANSACTION PARAMS
 declare type CheckoutTransactionParams = {
   plan: string;

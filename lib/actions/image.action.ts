@@ -5,7 +5,7 @@ import prisma from '../database/prisma';
 import { handleError } from '../utils';
 import { redirect } from 'next/navigation';
 
-// import { v2 as cloudinary } from 'cloudinary'
+import { v2 as cloudinary } from 'cloudinary';
 
 // ADD IMAGE
 export async function addImage({ image, userId, path }: AddImageParams) {
@@ -77,7 +77,7 @@ export async function getImageById(imageId: string) {
   try {
     const image = await prisma.image.findUnique({
       relationLoadStrategy: 'join',
-      where: {id: imageId},
+      where: { id: imageId },
       include: {
         author: {
           select: {
@@ -85,11 +85,10 @@ export async function getImageById(imageId: string) {
             clerkId: true,
             firstName: true,
             lastName: true,
-          }
+          },
         },
-      }
-      
-    })
+      },
+    });
 
     if (!image) throw new Error('Image not found');
 
@@ -100,68 +99,82 @@ export async function getImageById(imageId: string) {
 }
 
 // GET IMAGES
-// export async function getAllImages({
-//   limit = 9,
-//   page = 1,
-//   searchQuery = '',
-// }: {
-//   limit?: number;
-//   page: number;
-//   searchQuery?: string;
-// }) {
-//   try {
-//     await connectToDatabase();
+export async function getAllImages({
+  limit = 9,
+  page = 1,
+  searchQuery = '',
+}: {
+  limit?: number;
+  page: number;
+  searchQuery?: string;
+}) {
+  try {
+    cloudinary.config({
+      cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+      api_key: process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY,
+      api_secret: process.env.CLOUDINARY_API_SECRET,
+      secure: true,
+    });
 
-//     cloudinary.config({
-//       cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
-//       api_key: process.env.CLOUDINARY_API_KEY,
-//       api_secret: process.env.CLOUDINARY_API_SECRET,
-//       secure: true,
-//     });
+    let expression = 'folder=photo-puff';
 
-//     let expression = 'folder=imaginify';
+    if (searchQuery) {
+      expression += ` AND ${searchQuery}`;
+    }
 
-//     if (searchQuery) {
-//       expression += ` AND ${searchQuery}`;
-//     }
+    const { resources } = await cloudinary.search
+      .expression(expression)
+      .execute();
 
-//     const { resources } = await cloudinary.search
-//       .expression(expression)
-//       .execute();
+    const resourceIds = resources.map((resource: any) => resource.public_id);
 
-//     const resourceIds = resources.map((resource: any) => resource.public_id);
+    let query = {};
 
-//     let query = {};
+    if (searchQuery) {
+      query = {
+        skip: 200,
+        take: 20,
+        where: {
+          publicId: {
+            contains: resourceIds.join(','),
+          },
+        },
+      };
+    }
 
-//     if (searchQuery) {
-//       query = {
-//         publicId: {
-//           $in: resourceIds,
-//         },
-//       };
-//     }
+    const skipAmount = (Number(page) - 1) * limit;
 
-//     const skipAmount = (Number(page) - 1) * limit;
+    // const images = await populateUser(Image.find(query))
+    //   .sort({ updatedAt: -1 })
+    //   .skip(skipAmount)
+    //   .limit(limit);
 
-//     const images = await populateUser(Image.find(query))
-//       .sort({ updatedAt: -1 })
-//       .skip(skipAmount)
-//       .limit(limit);
+    const images = await prisma.image.findMany({
+      ...query,
+      orderBy: {
+        updatedAt: 'desc',
+      },
+    });
 
-//     const totalImages = await Image.find(query).countDocuments();
-//     const savedImages = await Image.find().countDocuments();
+    const totalImages = await prisma.image.findMany(query);
+    let totalImagesCount;
+    totalImages ? totalImagesCount = totalImages.length : totalImagesCount = 0;
 
-//     return {
-//       data: JSON.parse(JSON.stringify(images)),
-//       totalPage: Math.ceil(totalImages / limit),
-//       savedImages,
-//     };
-//   } catch (error) {
-//     handleError(error);
-//   }
-// }
+    const savedImages = await prisma.image.findMany();
+    let savedImagesCount;
+    savedImages ? savedImagesCount = totalImages.length : savedImagesCount = 0;
 
-// // GET IMAGES BY USER
+    return {
+      data: JSON.parse(JSON.stringify(images)),
+      totalPage: Math.ceil(totalImagesCount / limit),
+      savedImages: savedImagesCount,
+    };
+  } catch (error) {
+    handleError(error);
+  }
+}
+
+// GET IMAGES BY USER
 // export async function getUserImages({
 //   limit = 9,
 //   page = 1,

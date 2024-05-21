@@ -32,6 +32,7 @@ import TransformedImage from './TransformedImage';
 import { useToast } from '../ui/use-toast';
 import { addImage, updateImage } from '@/lib/actions/image.action';
 import { getCldImageUrl } from 'next-cloudinary';
+import { InsufficientCreditsModal } from './InsufficientCreditsModal';
 // import { InsufficientCreditsModal } from "./InsufficientCreditsModal"
 
 export const formSchema = z.object({
@@ -117,7 +118,6 @@ const TransformationForm = ({
 
           toast({
             title: 'Image saved successfully',
-            description: '1 credit was deducted from your account',
             duration: 5000,
             className: 'success-toast',
           });
@@ -137,10 +137,10 @@ const TransformationForm = ({
           const updatedImage = await updateImage({
             image: {
               ...imageData,
-              id: data.id,
+              id: data?.id,
             },
             userId,
-            path: `/transformations/${data.id}`,
+            path: `/transformations/${data?.id}`,
           });
 
           if (updatedImage) {
@@ -202,20 +202,21 @@ const TransformationForm = ({
     setIsTransforming(false);
 
     startTransition(async () => {
-      // await updateCredits(userId, creditFee)
+      await updateCredits(userId, creditFee);
     });
   };
 
-  // useEffect(() => {
-  //   if(image && (type === 'restore' || type === 'removeBackground')) {
-  //     setNewTransformation(transformationType.config)
-  //   }
-  // }, [image, transformationType.config, type])
+  //to immidiately enable the apply transformation btn for type restore or removebackground 
+  useEffect(() => {
+    if(image && action === "Add" && (type === 'restore' || type === 'removeBackground')) {
+      setNewTransformation(transformationType.config)
+    }
+  }, [image, transformationType.config, type, action]);
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
-        {/* {creditBalance < Math.abs(creditFee) && <InsufficientCreditsModal />} */}
+        {creditBalance < Math.abs(creditFee) && <InsufficientCreditsModal />}
         <CustomField
           control={form.control}
           name='title'
