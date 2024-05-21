@@ -61,9 +61,13 @@ const TransformedImage = ({
             sizes={'(max-width: 767px) 100vw, 50vw'}
             placeholder={dataUrl as PlaceholderValue}
             className='transformed-image'
-            onLoad={() => {
-              setIsTransforming && setIsTransforming(false);
-            }}
+            // onLoad={() => {
+            //   toast({
+            //     title: 'Transformed',
+            //     className: 'success-toast'
+            //   })
+            //   setIsTransforming && setIsTransforming(false);
+            // }}
             onError={() => {
               debounce(() => {
                 toast({

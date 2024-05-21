@@ -100,7 +100,7 @@ export async function getImageById(imageId: string) {
 
 // GET IMAGES
 export async function getAllImages({
-  limit = 9,
+  limit = 6,
   page = 1,
   searchQuery = '',
 }: {
@@ -128,12 +128,13 @@ export async function getAllImages({
 
     const resourceIds = resources.map((resource: any) => resource.public_id);
 
+    const skipAmount = (Number(page) - 1) * limit;
+
     let query = {};
 
+    //TODO: contains takes a string not an array
     if (searchQuery) {
       query = {
-        skip: 200,
-        take: 20,
         where: {
           publicId: {
             contains: resourceIds.join(','),
@@ -142,27 +143,18 @@ export async function getAllImages({
       };
     }
 
-    const skipAmount = (Number(page) - 1) * limit;
-
-    // const images = await populateUser(Image.find(query))
-    //   .sort({ updatedAt: -1 })
-    //   .skip(skipAmount)
-    //   .limit(limit);
-
     const images = await prisma.image.findMany({
+      skip: skipAmount,
+      take: limit,
       ...query,
       orderBy: {
         updatedAt: 'desc',
       },
     });
 
-    const totalImages = await prisma.image.findMany(query);
-    let totalImagesCount;
-    totalImages ? totalImagesCount = totalImages.length : totalImagesCount = 0;
+    const totalImagesCount = (await prisma.image.findMany(query)).length ?? 0;
 
-    const savedImages = await prisma.image.findMany();
-    let savedImagesCount;
-    savedImages ? savedImagesCount = totalImages.length : savedImagesCount = 0;
+    const savedImagesCount = (await prisma.image.findMany()).length ?? 0;
 
     return {
       data: JSON.parse(JSON.stringify(images)),
@@ -175,32 +167,38 @@ export async function getAllImages({
 }
 
 // GET IMAGES BY USER
-// export async function getUserImages({
-//   limit = 9,
-//   page = 1,
-//   userId,
-// }: {
-//   limit?: number;
-//   page: number;
-//   userId: string;
-// }) {
-//   try {
-//     await connectToDatabase();
+export async function getUserImages({
+  limit = 6,
+  page = 1,
+  userId,
+}: {
+  limit?: number;
+  page: number;
+  userId: string;
+}) {
+  try {
+    const skipAmount = (Number(page) - 1) * limit;
 
-//     const skipAmount = (Number(page) - 1) * limit;
+    const images = await prisma.image.findMany({
+      skip: skipAmount,
+      take: limit,
+      where: {
+        authorId: userId,
+      },
+      orderBy: {
+        updatedAt: 'desc',
+      },
+    });
 
-//     const images = await populateUser(Image.find({ author: userId }))
-//       .sort({ updatedAt: -1 })
-//       .skip(skipAmount)
-//       .limit(limit);
+    const totalImagesCount =
+      (await prisma.image.findMany({ where: { authorId: userId } })).length ??
+      0;
 
-//     const totalImages = await Image.find({ author: userId }).countDocuments();
-
-//     return {
-//       data: JSON.parse(JSON.stringify(images)),
-//       totalPages: Math.ceil(totalImages / limit),
-//     };
-//   } catch (error) {
-//     handleError(error);
-//   }
-// }
+    return {
+      data: JSON.parse(JSON.stringify(images)),
+      totalPages: Math.ceil(totalImagesCount / limit),
+    };
+  } catch (error) {
+    handleError(error);
+  }
+}

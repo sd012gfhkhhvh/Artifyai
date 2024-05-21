@@ -143,6 +143,12 @@ const TransformationForm = ({
             path: `/transformations/${data?.id}`,
           });
 
+          toast({
+            title: 'Image saved successfully',
+            duration: 5000,
+            className: 'success-toast',
+          });
+
           if (updatedImage) {
             router.push(`/transformations/${updatedImage.id}`);
           }
@@ -198,18 +204,29 @@ const TransformationForm = ({
       deepMergeObjects(newTransformation, transformationConfig) //this is usefull in case of updates to avoid conflicts
     );
 
-    setNewTransformation(null);
-    setIsTransforming(false);
-
     startTransition(async () => {
       await updateCredits(userId, creditFee);
+      //show toast message
+      toast({
+        title: 'Image transformed successfully',
+        description: '1 credit is decucted',
+        duration: 5000,
+        className: 'success-toast',
+      });
     });
+
+    setNewTransformation(null);
+    setIsTransforming(false);
   };
 
-  //to immidiately enable the apply transformation btn for type restore or removebackground 
+  //to immidiately enable the apply transformation btn for type restore or removebackground
   useEffect(() => {
-    if(image && action === "Add" && (type === 'restore' || type === 'removeBackground')) {
-      setNewTransformation(transformationType.config)
+    if (
+      image &&
+      action === 'Add' &&
+      (type === 'restore' || type === 'removeBackground')
+    ) {
+      setNewTransformation(transformationType.config);
     }
   }, [image, transformationType.config, type, action]);
 
