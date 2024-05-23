@@ -20,7 +20,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'Photo-Puff',
+  title: 'Artify AI',
   description: 'AI photo editor',
 };
 
