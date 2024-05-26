@@ -36,8 +36,8 @@ model Transaction {
   amount    Int?
   plan      String?
   credits   Int?
-  buyer     User?    @relation(fields: [userId], references: [id])
-  userId    String?
+  buyer     User?    @relation(fields: [buyerId], references: [id])
+  buyerId    String?
 }
 
 model Image {
