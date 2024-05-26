@@ -22,7 +22,7 @@ const Checkout = ({
   const { toast } = useToast();
 
   useEffect(() => {
-    loadStripe(process.env.STRIPE_PUBLISHABLE_KEY!);
+    loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
   }, []);
 
   useEffect(() => {
