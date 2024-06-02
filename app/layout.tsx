@@ -5,6 +5,7 @@ import './globals.css';
 
 import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
+import NextTopLoader from 'nextjs-toploader';
 
 //providers
 import Providers from '@/lib/providers';
@@ -37,6 +38,7 @@ export default function RootLayout({
           montserrat.variable
         )}
       >
+        <NextTopLoader/>
         <Providers>{children}</Providers>
         <Toaster />
       </body>

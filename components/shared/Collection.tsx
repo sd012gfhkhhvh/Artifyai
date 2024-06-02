@@ -1,23 +1,23 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import Link from "next/link";
-import { useSearchParams, useRouter } from "next/navigation";
-import { CldImage } from "next-cloudinary";
+import Image from 'next/image';
+import Link from 'next/link';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { CldImage } from 'next-cloudinary';
 
 import {
   Pagination,
   PaginationContent,
   PaginationNext,
   PaginationPrevious,
-} from "@/components/ui/pagination";
-import { transformationTypes } from "@/constants";
-// import { IImage } from "@/lib/database/models/image.model";
-import { formUrlQuery } from "@/lib/utils";
+} from '@/components/ui/pagination';
+import { transformationTypes } from '@/constants';
 
-import { Button } from "../ui/button";
+import { formUrlQuery } from '@/lib/utils';
 
-import { Search } from "./Search";
+import { Button } from '../ui/button';
+
+import { Search } from './Search';
 
 export const Collection = ({
   hasSearch = false,
@@ -34,58 +34,60 @@ export const Collection = ({
   const searchParams = useSearchParams();
 
   // PAGINATION HANDLER
-  const onPageChange = (action: string) => {
-    const pageValue = action === "next" ? Number(page) + 1 : Number(page) - 1;
-
-    const newUrl = formUrlQuery({
+  const onPageChange = async (action: string) => {
+    const pageValue = action === 'next' ? Number(page) + 1 : Number(page) - 1;
+    console.log("changing params");
+    const newUrl = await formUrlQuery({
       searchParams: searchParams.toString(),
-      key: "page",
+      key: 'page',
       value: pageValue,
     });
-
+    console.log("changed params");
+    console.log(`newUrl: ${newUrl}`);
+    
     router.push(newUrl, { scroll: false });
   };
 
   return (
     <>
-      <div className="collection-heading">
-        <h2 className="h2-bold text-dark-600">Recent Edits</h2>
+      <div className='collection-heading'>
+        <h2 className='h2-bold text-dark-600'>Recent Edits</h2>
         {hasSearch && <Search />}
       </div>
 
       {images.length > 0 ? (
-        <ul className="collection-list">
+        <ul className='collection-list'>
           {images.map((image) => (
             <Card image={image} key={image.id} />
           ))}
         </ul>
       ) : (
-        <div className="collection-empty">
-          <p className="p-20-semibold">Empty List</p>
+        <div className='collection-empty'>
+          <p className='p-20-semibold'>Empty List</p>
         </div>
       )}
 
       {totalPages > 1 && (
-        <Pagination className="mt-10">
-          <PaginationContent className="flex w-full">
+        <Pagination className='mt-10'>
+          <PaginationContent className='flex w-full'>
             <Button
               disabled={Number(page) <= 1}
-              className="collection-btn"
-              onClick={() => onPageChange("prev")}
+              className='collection-btn'
+              onClick={() => onPageChange('prev')}
             >
-              <PaginationPrevious className="hover:bg-transparent hover:text-white" />
+              <PaginationPrevious className='hover:bg-transparent hover:text-white' />
             </Button>
 
-            <p className="flex-center p-16-medium w-fit flex-1">
+            <p className='flex-center p-16-medium w-fit flex-1'>
               {page} / {totalPages}
             </p>
 
             <Button
-              className="button w-32 bg-purple-gradient bg-cover text-white"
-              onClick={() => onPageChange("next")}
+              className='button w-32 bg-purple-gradient bg-cover text-white'
+              onClick={() => onPageChange('next')}
               disabled={Number(page) >= totalPages}
             >
-              <PaginationNext className="hover:bg-transparent hover:text-white" />
+              <PaginationNext className='hover:bg-transparent hover:text-white' />
             </Button>
           </PaginationContent>
         </Pagination>
@@ -97,19 +99,19 @@ export const Collection = ({
 const Card = ({ image }: { image: any }) => {
   return (
     <li>
-      <Link href={`/transformations/${image.id}`} className="collection-card">
+      <Link href={`/transformations/${image.id}`} className='collection-card'>
         <CldImage
           src={image.publicId}
           alt={image.title}
           width={image.width}
           height={image.height}
           {...image.config}
-          loading="lazy"
-          className="h-52 w-full rounded-[10px] object-cover"
-          sizes="(max-width: 767px) 100vw, (max-width: 1279px) 50vw, 33vw"
+          loading='lazy'
+          className='h-52 w-full rounded-[10px] object-cover'
+          sizes='(max-width: 767px) 100vw, (max-width: 1279px) 50vw, 33vw'
         />
-        <div className="flex-between">
-          <p className="p-20-semibold mr-3 line-clamp-1 text-dark-600">
+        <div className='flex-between'>
+          <p className='p-20-semibold mr-3 line-clamp-1 text-dark-600'>
             {image.title}
           </p>
           <Image

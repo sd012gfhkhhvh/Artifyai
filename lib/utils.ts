@@ -53,7 +53,7 @@ export const dataUrl = `data:image/svg+xml;base64,${toBase64(
 // ==== End
 
 // FORM URL QUERY
-export const formUrlQuery = ({
+export const formUrlQuery = async({
   searchParams,
   key,
   value,

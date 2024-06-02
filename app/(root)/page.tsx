@@ -7,8 +7,14 @@ import Link from 'next/link';
 const Home = async ({ searchParams }: SearchParamProps) => {
   const page = Number(searchParams?.page) || 1;
   const searchQuery = (searchParams?.query as string) || '';
+  console.log('getting images ...');
 
   const images = await getAllImages({ page, searchQuery });
+  await new Promise((resolve, reject) => {
+    setTimeout(resolve, 2000);
+  });
+
+  console.log('got images');
 
   return (
     <>

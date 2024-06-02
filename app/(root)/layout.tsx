@@ -1,5 +1,6 @@
 import MobileNav from '@/components/shared/MobileNav';
 import Sidebar from '@/components/shared/Sidebar';
+import NextTopLoader from 'nextjs-toploader';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -10,7 +11,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <MobileNav />
 
       <div className='root-container'>
-        <div className='wrapper'>{children}</div>
+        <div className='wrapper'>
+          <NextTopLoader />
+          {children}
+        </div>
       </div>
     </main>
   );
