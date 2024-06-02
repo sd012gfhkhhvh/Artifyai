@@ -8,11 +8,12 @@ const Home = async ({ searchParams }: SearchParamProps) => {
   const page = Number(searchParams?.page) || 1;
   const searchQuery = (searchParams?.query as string) || '';
   console.log('getting images ...');
+  console.log(`searchparams: ${JSON.stringify(searchParams)}`);
 
   const images = await getAllImages({ page, searchQuery });
-  await new Promise((resolve, reject) => {
-    setTimeout(resolve, 2000);
-  });
+  // await new Promise((resolve, reject) => {
+  //   reject;
+  // });
 
   console.log('got images');
 
