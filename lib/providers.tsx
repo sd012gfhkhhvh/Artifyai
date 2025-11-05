@@ -1,23 +1,31 @@
-import React from 'react';
-import { ClerkProvider } from '@clerk/nextjs';
+import React from "react";
+import { ClerkProvider } from "@clerk/nextjs";
 
 //theme
-import { dark, neobrutalism, shadesOfPurple } from '@clerk/themes';
+import { dark, neobrutalism, shadesOfPurple } from "@clerk/themes";
+import { ThemeProvider } from "@/components/theme-prover";
 
 const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
     <div>
-      <ClerkProvider
-        appearance={{
-          baseTheme: [neobrutalism],
-          variables: { colorPrimary: 'blue' },
-          signIn: {
-            variables: { colorPrimary: 'red' },
-          },
-        }}
+      <ThemeProvider
+        attribute="class"
+        defaultTheme="system"
+        enableSystem
+        disableTransitionOnChange
       >
-        {children}
-      </ClerkProvider>
+        <ClerkProvider
+          appearance={{
+            baseTheme: [neobrutalism],
+            variables: { colorPrimary: "blue" },
+            signIn: {
+              variables: { colorPrimary: "red" },
+            },
+          }}
+        >
+          {children}
+        </ClerkProvider>
+      </ThemeProvider>
     </div>
   );
 };
