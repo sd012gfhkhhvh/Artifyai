@@ -8,7 +8,7 @@ import { usePathname } from "next/navigation";
 import { Button } from "../ui/button";
 import { ThemeToggle } from "../ThemeToggle";
 
-const Sidebar = () => {
+const OldSidebar = () => {
   const pathname = usePathname(); // gives the current pathname
 
   return (
@@ -99,4 +99,4 @@ const Sidebar = () => {
   );
 };
 
-export default Sidebar;
+export default OldSidebar;

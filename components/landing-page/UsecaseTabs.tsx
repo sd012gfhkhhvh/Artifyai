@@ -1,9 +1,9 @@
 "use client";
 
-import { Tabs } from "./ui/tabs";
+import { Tabs } from "@components/ui/tabs";
 import { cn } from "@/lib/utils";
 
-export function TabsDemo({ className }: { className?: string }) {
+export function UsecaseTabs({ className }: { className?: string }) {
   const tabs = [
     {
       title: "Product",
@@ -58,7 +58,12 @@ export function TabsDemo({ className }: { className?: string }) {
   ];
 
   return (
-    <div className={cn("h-[30rem] md:h-[40rem] [perspective:1000px] relative b flex flex-col max-w-5xl mx-auto w-full  items-start justify-start my-40", className)}>
+    <div
+      className={cn(
+        "h-[30rem] md:h-[40rem] [perspective:1000px] relative b flex flex-col max-w-5xl mx-auto w-full  items-start justify-start my-40",
+        className
+      )}
+    >
       <Tabs tabs={tabs} />
     </div>
   );

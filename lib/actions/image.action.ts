@@ -1,11 +1,11 @@
-'use server';
+"use server";
 
-import { revalidatePath } from 'next/cache';
-import prisma from '../database/prisma';
-import { handleError } from '../utils';
-import { redirect } from 'next/navigation';
+import { revalidatePath } from "next/cache";
+import prisma from "../database/prisma";
+import { handleError } from "../utils";
+import { redirect } from "next/navigation";
 
-import { v2 as cloudinary } from 'cloudinary';
+import { v2 as cloudinary } from "cloudinary";
 
 // ADD IMAGE
 export async function addImage({ image, userId, path }: AddImageParams) {
@@ -13,7 +13,7 @@ export async function addImage({ image, userId, path }: AddImageParams) {
     const author = await prisma.user.findUnique({ where: { id: userId } });
 
     if (!author) {
-      throw new Error('User not found');
+      throw new Error("User not found");
     }
 
     const newImage = await prisma.image.create({
@@ -41,7 +41,7 @@ export async function updateImage({ image, userId, path }: UpdateImageParams) {
     });
 
     if (!imageToUpdate || imageToUpdate.authorId !== userId) {
-      throw new Error('Unauthorized or image not found');
+      throw new Error("Unauthorized or image not found");
     }
 
     const updatedImage = await prisma.image.update({
@@ -68,7 +68,7 @@ export async function deleteImage(imageId: string) {
   } catch (error) {
     handleError(error);
   } finally {
-    redirect('/');
+    redirect("/");
   }
 }
 
@@ -76,7 +76,7 @@ export async function deleteImage(imageId: string) {
 export async function getImageById(imageId: string) {
   try {
     const image = await prisma.image.findUnique({
-      relationLoadStrategy: 'join',
+      relationLoadStrategy: "join",
       where: { id: imageId },
       include: {
         author: {
@@ -90,7 +90,7 @@ export async function getImageById(imageId: string) {
       },
     });
 
-    if (!image) throw new Error('Image not found');
+    if (!image) throw new Error("Image not found");
 
     return JSON.parse(JSON.stringify(image));
   } catch (error) {
@@ -102,7 +102,7 @@ export async function getImageById(imageId: string) {
 export async function getAllImages({
   limit = 6,
   page = 1,
-  searchQuery = '',
+  searchQuery = "",
 }: {
   limit?: number;
   page: number;
@@ -116,7 +116,7 @@ export async function getAllImages({
       secure: true,
     });
 
-    let expression = 'folder=photo-puff';
+    let expression = "folder=photo-puff";
 
     if (searchQuery) {
       expression += ` AND ${searchQuery}`;
@@ -137,7 +137,7 @@ export async function getAllImages({
       query = {
         where: {
           publicId: {
-            contains: resourceIds.join(','),
+            contains: resourceIds.join(","),
           },
         },
       };
@@ -148,7 +148,7 @@ export async function getAllImages({
       take: limit,
       ...query,
       orderBy: {
-        updatedAt: 'desc',
+        updatedAt: "desc",
       },
     });
 
@@ -186,7 +186,7 @@ export async function getUserImages({
         authorId: userId,
       },
       orderBy: {
-        updatedAt: 'desc',
+        updatedAt: "desc",
       },
     });
 
@@ -202,3 +202,15 @@ export async function getUserImages({
     handleError(error);
   }
 }
+
+export const getImageCount = async ({ userId }: { userId: string }) => {
+  try {
+    const count = await prisma.image.count({
+      where: { authorId: userId },
+    });
+
+    return count;
+  } catch (error) {
+    handleError(error);
+  }
+};

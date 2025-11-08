@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { currentUser } from "@clerk/nextjs/server";
 
-import { LandingPage } from "@/components/LandingPage";
+import { LandingPage } from "@/components/landing-page/LandingPage";
 
 const Home = async ({ searchParams }: SearchParamProps) => {
   const user = await currentUser();
@@ -26,7 +26,7 @@ const Home = async ({ searchParams }: SearchParamProps) => {
   console.log("got images");
 
   return (
-    <>
+    <div className="min-w-full min-h-screen">
       <section className="home">
         <h1 className="home-heading">
           Unleash Your Creative Vision with Artify
@@ -48,6 +48,7 @@ const Home = async ({ searchParams }: SearchParamProps) => {
       </section>
 
       <section className="sm:mt-12">
+        <h1 className="text-h1">Recent Edits</h1>
         <Collection
           hasSearch={true}
           images={images?.data}
@@ -55,7 +56,7 @@ const Home = async ({ searchParams }: SearchParamProps) => {
           page={page}
         />
       </section>
-    </>
+    </div>
   );
 };
 
