@@ -1,11 +1,11 @@
 "use client";
 
-import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { Input } from "@/components/ui/input";
 import { formUrlQuery, removeKeysFromQuery } from "@/lib/utils";
+import { SearchIcon } from "lucide-react";
 
 export const Search = () => {
   const router = useRouter();
@@ -37,12 +37,9 @@ export const Search = () => {
 
   return (
     <div className="search">
-      <Image
-        src="/assets/icons/search.svg"
-        alt="search"
-        width={24}
-        height={24}
-      />
+      <span className="my-auto">
+        <SearchIcon className="w-5 h-5 text-gray-500 mr-2" />
+      </span>
 
       <Input
         className="search-field"

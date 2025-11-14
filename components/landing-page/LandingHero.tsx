@@ -3,8 +3,8 @@ import React from "react";
 import { SignInButton, SignUpButton } from "@clerk/nextjs";
 
 // UI imports
-import { FileUpload } from "@components/ui/file-upload";
-import { Button } from "@components/ui/button";
+import { FileUpload } from "@/components/ui/file-upload";
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 export const LandingHero = () => {

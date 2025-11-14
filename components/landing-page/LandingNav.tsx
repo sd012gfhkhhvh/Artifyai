@@ -14,24 +14,24 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
-} from "@components/ui/navigation-menu";
+} from "@/components/ui/navigation-menu";
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@components/ui/sheet";
+} from "@/components/ui/sheet";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@components/ui/accordion";
-import { ThemeToggle } from "@components/ThemeToggle";
-import { Button } from "@components/ui/button";
-import { Separator } from "@components/ui/separator";
-import Brand from "@components/shared/Brand";
+} from "@/components/ui/accordion";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import Brand from "@/components/shared/Brand";
 
 const components: { title: string; href: string; description: string }[] = [
   {

@@ -40,9 +40,9 @@ import { SelectSeparator } from "../ui/select";
 import { ExitIcon } from "@radix-ui/react-icons";
 import { useIsMobile } from "@/hooks/use-mobile";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import LoaderCircular from "./LoaderCircular";
-import { useParams, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 // Menu items.
 const Tools = [
@@ -134,13 +134,17 @@ export function AppSidebar() {
                 sideOffset={15}
                 className="p w-[--radix-popper-anchor-width]"
               >
-                <DropdownMenuItem className="hover:bg-sidebar-accent">
-                  <FileIcon />
-                  <span>Acme Inc</span>
+                <DropdownMenuItem className="p-0">
+                  <SidebarMenuButton>
+                    <FileIcon />
+                    <span>Acme Inc</span>
+                  </SidebarMenuButton>
                 </DropdownMenuItem>
-                <DropdownMenuItem className="hover:bg-sidebar-accent">
-                  <FileIcon />
-                  <span>Acme Corp.</span>
+                <DropdownMenuItem className="p-0">
+                  <SidebarMenuButton>
+                    <FileIcon />
+                    <span>Acme Corp.</span>
+                  </SidebarMenuButton>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -190,6 +194,28 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
+      {/* Theme toggle group */}
+      {/* {!isSidebarOpen && !openMobile && (
+        <SidebarContent>
+          <SidebarGroup>
+            <SidebarGroupLabel>Theme</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild>
+                    <ThemeToggle
+                      size={"sm"}
+                      dropDownItemClassName="hover:bg-sidebar-accent"
+                      className="rounded-xl border-none bg-inherit hover:bg-sidebar-accent w-full"
+                    />
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        </SidebarContent>
+      )} */}
+
       {/* footer */}
       <SidebarFooter>
         <SidebarMenu>
@@ -202,55 +228,85 @@ export function AppSidebar() {
               />
             )}
             <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
-              <DropdownMenuTrigger className="">
-                <SidebarMenuButton className="py-5">
-                  {user?.imageUrl ? (
-                    <img
-                      src={user?.imageUrl}
-                      alt={user?.firstName || "User"}
-                      className="h-8 w-8 mr-2 rounded-full"
-                    />
-                  ) : (
-                    <User2 />
-                  )}
-                  <span>{user?.fullName || "User"}</span>
-                  {(isSidebarOpen || openMobile) && (
-                    <ChevronsUpDown className="ml-auto" />
-                  )}
-                </SidebarMenuButton>
+              {/* <SidebarMenuButton asChild> */}
+              <DropdownMenuTrigger
+                className={`${
+                  isSidebarOpen || openMobile
+                    ? "py-1 hover:bg-sidebar-accent"
+                    : ""
+                } flex rounded-md  justify-around items-center`}
+              >
+                {user?.imageUrl ? (
+                  <img
+                    src={user?.imageUrl}
+                    alt={user?.firstName || "User"}
+                    className={`h-8 w-8 rounded-full ${
+                      isSidebarOpen || openMobile ? "mx-2" : ""
+                    }`}
+                  />
+                ) : (
+                  <User2 />
+                )}
+                {(isSidebarOpen || openMobile) && (
+                  <span className="flex items-center justify-between gap-2 mr-1">
+                    {user?.fullName || "User"}
+                    <ChevronsUpDown size={15} />
+                  </span>
+                )}
               </DropdownMenuTrigger>
+              {/* </SidebarMenuButton> */}
               <DropdownMenuContent
                 side={isMobile ? "bottom" : "right"}
                 sideOffset={15}
-                className="w-[--radix-popper-anchor-width]"
+                className=""
               >
-                <DropdownMenuItem>
-                  <UserButton afterSignOutUrl="/" showName={isSidebarOpen} />
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  className="hover:bg-sidebar-accent"
-                  onClick={() => setDropdownOpen(false)}
-                >
-                  <User2 />
-                  <Link href="/profile">Profile</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  className="hover:bg-sidebar-accent"
-                  onClick={() => setDropdownOpen(false)}
-                >
-                  <HandCoinsIcon />
-                  <Link href="/credits">Buy Credits</Link>
+                <DropdownMenuItem className="hover:bg-sidebar-accent">
+                  <UserButton afterSignOutUrl="/" showName={true} />
                 </DropdownMenuItem>
                 <SelectSeparator />
                 <DropdownMenuItem
-                  className="hover:bg-sidebar-accent"
+                  className="p-0"
+                  onClick={() => setDropdownOpen(false)}
+                >
+                  <SidebarMenuButton>
+                    <User2 />
+                    <Link className="w-full" href="/profile">
+                      Profile
+                    </Link>
+                  </SidebarMenuButton>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="p-0"
+                  onClick={() => setDropdownOpen(false)}
+                >
+                  <SidebarMenuButton>
+                    <HandCoinsIcon />
+                    <Link className="w-full" href="/credits">
+                      Buy Credits
+                    </Link>
+                  </SidebarMenuButton>
+                </DropdownMenuItem>
+                {!isSidebarOpen && !openMobile && (
+                  <ThemeToggle
+                    size={"icon"}
+                    dropDownItemClassName="hover:bg-sidebar-accent"
+                    className="w-full rounded-xl border-none bg-inherit hover:bg-sidebar-accent"
+                  />
+                )}
+                <SelectSeparator />
+                <DropdownMenuItem
+                  className="p-0"
                   onClick={() => {
                     handleSignOut();
                     setDropdownOpen(false);
                   }}
                 >
-                  <ExitIcon />
-                  <Link href="#">Sign Out</Link>
+                  <SidebarMenuButton>
+                    <ExitIcon />
+                    <Link className="w-full" href="#">
+                      Sign Out
+                    </Link>
+                  </SidebarMenuButton>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

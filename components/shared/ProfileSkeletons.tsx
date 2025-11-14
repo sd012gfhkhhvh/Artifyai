@@ -1,4 +1,5 @@
-import { Skeleton } from '@/components/ui/skeleton';
+import { Skeleton } from "@/components/ui/skeleton";
+import { SkeletonCards } from "./Collection";
 
 export function ProfileStatsskeleton() {
   return (
@@ -53,10 +54,7 @@ export function ProfileActivitySkeleton() {
       <Skeleton className="h-6 w-40 mb-4" />
       <div className="space-y-3">
         {[1, 2, 3].map((i) => (
-          <div
-            key={i}
-            className="flex items-center gap-4 p-3 rounded-lg"
-          >
+          <div key={i} className="flex items-center gap-4 p-3 rounded-lg">
             <Skeleton className="h-10 w-10 rounded-full flex-shrink-0" />
             <div className="flex-1 space-y-2">
               <Skeleton className="h-4 w-48" />
@@ -71,23 +69,8 @@ export function ProfileActivitySkeleton() {
 
 export function ProfileCollectionSkeleton() {
   return (
-    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
-      {[1, 2, 3, 4, 5, 6].map((i) => (
-        <div
-          key={i}
-          className="flex flex-col gap-5 rounded-2xl border-2 bg-white p-4 dark:bg-gray-800"
-        >
-          <Skeleton className="h-52 w-full rounded-xl" />
-          <div className="space-y-2">
-            <Skeleton className="h-4 w-3/4" />
-            <Skeleton className="h-3 w-1/2" />
-          </div>
-          <div className="flex justify-between">
-            <Skeleton className="h-8 w-20" />
-            <Skeleton className="h-8 w-20" />
-          </div>
-        </div>
-      ))}
-    </div>
+    <ul className="mt-8 grid auto-rows-[1fr] gap-6 sm:grid-cols-2 xl:grid-cols-3">
+      <SkeletonCards count={6} />
+    </ul>
   );
 }

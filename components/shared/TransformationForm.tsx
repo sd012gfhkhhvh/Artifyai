@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { useEffect, useState, useTransition } from 'react';
-import { useRouter } from 'next/navigation';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { useEffect, useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 
 import {
   Select,
@@ -12,27 +12,27 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Button } from '@/components/ui/button';
-import { Form } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+} from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { Form } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 
 import {
   aspectRatioOptions,
   creditFee,
   defaultValues,
   transformationTypes,
-} from '@/constants';
+} from "@/constants";
 
-import { CustomField } from './CustomField';
-import { AspectRatioKey, debounce, deepMergeObjects } from '@/lib/utils';
-import { updateCredits } from '@/lib/actions/user.action';
-import MediaUploader from './MediaUploader';
-import TransformedImage from './TransformedImage';
-import { useToast } from '../ui/use-toast';
-import { addImage, updateImage } from '@/lib/actions/image.action';
-import { getCldImageUrl } from 'next-cloudinary';
-import { InsufficientCreditsModal } from './InsufficientCreditsModal';
+import { CustomField } from "./CustomField";
+import { AspectRatioKey, debounce, deepMergeObjects } from "@/lib/utils";
+import { updateCredits } from "@/lib/actions/user.action";
+import MediaUploader from "./MediaUploader";
+import TransformedImage from "./TransformedImage";
+import { useToast } from "../ui/use-toast";
+import { addImage, updateImage } from "@/lib/actions/image.action";
+import { getCldImageUrl } from "next-cloudinary";
+import { InsufficientCreditsModal } from "./InsufficientCreditsModal";
 // import { InsufficientCreditsModal } from "./InsufficientCreditsModal"
 
 export const formSchema = z.object({
@@ -64,7 +64,7 @@ const TransformationForm = ({
   const { toast } = useToast();
 
   const initialValues =
-    data && action === 'Update'
+    data && action === "Update"
       ? {
           title: data?.title,
           aspectRatio: data?.aspectRatio,
@@ -106,20 +106,20 @@ const TransformationForm = ({
         color: values.color,
       };
 
-      if (action === 'Add') {
+      if (action === "Add") {
         try {
           const newImage = await addImage({
             image: imageData,
             userId,
-            path: '/',
+            path: "/",
           });
 
           console.log(newImage);
 
           toast({
-            title: 'Image saved successfully',
+            title: "Image saved successfully",
             duration: 5000,
-            className: 'success-toast',
+            className: "success-toast",
           });
 
           if (newImage) {
@@ -132,7 +132,7 @@ const TransformationForm = ({
         }
       }
 
-      if (action === 'Update') {
+      if (action === "Update") {
         try {
           const updatedImage = await updateImage({
             image: {
@@ -144,9 +144,9 @@ const TransformationForm = ({
           });
 
           toast({
-            title: 'Image saved successfully',
+            title: "Image saved successfully",
             duration: 5000,
-            className: 'success-toast',
+            className: "success-toast",
           });
 
           if (updatedImage) {
@@ -189,7 +189,7 @@ const TransformationForm = ({
         ...prevState,
         [type]: {
           ...prevState?.[type],
-          [fieldName === 'prompt' ? 'prompt' : 'to']: value,
+          [fieldName === "prompt" ? "prompt" : "to"]: value,
         },
       }));
     }, 1000)();
@@ -208,10 +208,10 @@ const TransformationForm = ({
       await updateCredits(userId, creditFee);
       //show toast message
       toast({
-        title: 'Image transformed successfully',
-        description: '1 credit is decucted',
+        title: "Image transformed successfully",
+        description: "1 credit is decucted",
         duration: 5000,
-        className: 'success-toast',
+        className: "success-toast",
       });
     });
 
@@ -223,8 +223,8 @@ const TransformationForm = ({
   useEffect(() => {
     if (
       image &&
-      action === 'Add' &&
-      (type === 'restore' || type === 'removeBackground')
+      action === "Add" &&
+      (type === "restore" || type === "removeBackground")
     ) {
       setNewTransformation(transformationType.config);
     }
@@ -232,22 +232,22 @@ const TransformationForm = ({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         {creditBalance < Math.abs(creditFee) && <InsufficientCreditsModal />}
         <CustomField
           control={form.control}
-          name='title'
-          formLabel='Image Title'
-          className='w-full'
-          render={({ field }) => <Input {...field} className='input-field' />}
+          name="title"
+          formLabel="Image Title"
+          className="w-full"
+          render={({ field }) => <Input {...field} className="input-field" />}
         />
 
-        {type === 'fill' && (
+        {type === "fill" && (
           <CustomField
             control={form.control}
-            name='aspectRatio'
-            formLabel='Aspect Ratio'
-            className='w-full'
+            name="aspectRatio"
+            formLabel="Aspect Ratio"
+            className="w-full"
             render={({ field }) => (
               <Select
                 onValueChange={(value) =>
@@ -255,12 +255,12 @@ const TransformationForm = ({
                 }
                 value={field.value}
               >
-                <SelectTrigger className='select-field'>
-                  <SelectValue placeholder='Select size' />
+                <SelectTrigger className="select-field">
+                  <SelectValue placeholder="Select size" />
                 </SelectTrigger>
                 <SelectContent>
                   {Object.keys(aspectRatioOptions).map((key) => (
-                    <SelectItem key={key} value={key} className='select-item'>
+                    <SelectItem key={key} value={key} className="select-item">
                       {aspectRatioOptions[key as AspectRatioKey].label}
                     </SelectItem>
                   ))}
@@ -270,22 +270,22 @@ const TransformationForm = ({
           />
         )}
 
-        {(type === 'remove' || type === 'recolor') && (
-          <div className='prompt-field'>
+        {(type === "remove" || type === "recolor") && (
+          <div className="prompt-field">
             <CustomField
               control={form.control}
-              name='prompt'
+              name="prompt"
               formLabel={
-                type === 'remove' ? 'Object to remove' : 'Object to recolor'
+                type === "remove" ? "Object to remove" : "Object to recolor"
               }
-              className='w-full'
+              className="w-full"
               render={({ field }) => (
                 <Input
                   value={field.value}
-                  className='input-field'
+                  className="input-field"
                   onChange={(e) =>
                     onInputChangeHandler(
-                      'prompt',
+                      "prompt",
                       e.target.value,
                       type,
                       field.onChange
@@ -295,19 +295,19 @@ const TransformationForm = ({
               )}
             />
 
-            {type === 'recolor' && (
+            {type === "recolor" && (
               <CustomField
                 control={form.control}
-                name='color'
-                formLabel='Replacement Color'
-                className='w-full'
+                name="color"
+                formLabel="Replacement Color"
+                className="w-full"
                 render={({ field }) => (
                   <Input
                     value={field.value}
-                    className='input-field'
+                    className="input-field"
                     onChange={(e) =>
                       onInputChangeHandler(
-                        'color',
+                        "color",
                         e.target.value,
                         type,
                         field.onChange
@@ -320,11 +320,11 @@ const TransformationForm = ({
           </div>
         )}
 
-        <div className='media-uploader-field'>
+        <div className="media-uploader-field">
           <CustomField
             control={form.control}
-            name='publicId'
-            className='flex size-full flex-col'
+            name="publicId"
+            className="flex size-full flex-col"
             render={({ field }) => (
               <MediaUploader
                 onValueChange={field.onChange}
@@ -347,21 +347,21 @@ const TransformationForm = ({
         </div>
 
         {/* buttons */}
-        <div className='flex flex-col gap-4'>
+        <div className="flex flex-col gap-4">
           <Button
-            type='button'
-            className='submit-button capitalize'
+            type="button"
+            className="submit-button capitalize"
             disabled={isTransforming || newTransformation === null}
             onClick={onTransformHandler}
           >
-            {isTransforming ? 'Transforming...' : 'Apply Transformation'}
+            {isTransforming ? "Transforming..." : "Apply Transformation"}
           </Button>
           <Button
-            type='submit'
-            className='submit-button capitalize'
+            type="submit"
+            className="submit-button capitalize"
             disabled={isSubmitting}
           >
-            {isSubmitting ? 'Submitting...' : 'Save Image'}
+            {isSubmitting ? "Submitting..." : "Save Image"}
           </Button>
         </div>
       </form>

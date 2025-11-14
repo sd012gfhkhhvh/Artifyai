@@ -10,15 +10,15 @@ import { useIsMobile, useIsTablet } from "@/hooks/use-mobile";
 
 // component imports
 import { LandingNav } from "@/components/landing-page/LandingNav";
-import { MarqueeDemo } from "@components/landing-page/MarqueeDemo";
+import { MarqueeDemo } from "@/components/landing-page/MarqueeDemo";
 import { UsecaseTabs } from "@/components/landing-page/UsecaseTabs";
-import Brand from "@components/shared/Brand";
+import Brand from "@/components/shared/Brand";
 
 // UI imports
-import ScrollStack, { ScrollStackItem } from "@components/ui/ScrollStack";
-import { BentoCard, BentoGrid } from "@components/ui/bento-grid";
-import { Button } from "@components/ui/button";
-import LiquidEther from "@components/shared/Hero";
+import ScrollStack, { ScrollStackItem } from "@/components/ui/ScrollStack";
+import { BentoCard, BentoGrid } from "@/components/ui/bento-grid";
+import { Button } from "@/components/ui/button";
+import LiquidEther from "@/components/shared/Hero";
 
 // icon imports
 import {

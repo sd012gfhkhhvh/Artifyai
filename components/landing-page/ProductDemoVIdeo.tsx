@@ -1,5 +1,5 @@
 import React from "react";
-import { HeroVideoDialog } from "@components/ui/hero-video-dialog";
+import { HeroVideoDialog } from "@/components/ui/hero-video-dialog";
 
 export const ProductDemoVideo = () => {
   return (

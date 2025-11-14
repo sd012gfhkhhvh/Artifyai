@@ -1,6 +1,6 @@
 "use client";
 
-import { Tabs } from "@components/ui/tabs";
+import { Tabs } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 
 export function UsecaseTabs({ className }: { className?: string }) {

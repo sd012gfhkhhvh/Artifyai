@@ -1,81 +1,53 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  useEffect,
+  useRef,
+} from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useSearchParams, useRouter } from "next/navigation";
+
 import { CldImage } from "next-cloudinary";
 
-import {
-  Pagination,
-  PaginationContent,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
 import { transformationTypes } from "@/constants";
 
-import { formUrlQuery } from "@/lib/utils";
-
-import { Button } from "../ui/button";
-
 import { Search } from "./Search";
+import { NUMBER_OF_IMAGES_TO_FETCH } from "./all-images-collection";
+import { infiniteScrollImageLoadertype } from "@/lib/types";
+import { useImageCollection } from "@/hooks/use-image-collection";
 
 export const Collection = ({
+  type,
+  userId = null,
   hasSearch = false,
-  images,
-  totalPages = 1,
-  page,
+  searchQuery,
+  initialImages,
+  totalImageCount = 1,
 }: {
-  images: any[];
-  totalPages?: number;
-  page: number;
+  userId?: string | null;
+  type: infiniteScrollImageLoadertype;
+  initialImages: any[];
+  totalImageCount?: number;
   hasSearch?: boolean;
+  searchQuery?: string;
 }) => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const [allImages, setAllImages] = useState<any[]>(images);
-  const [isLoading, setIsLoading] = useState(false);
-
-  // Update allImages when new images come in
-  useEffect(() => {
-    setAllImages((prev) => {
-      // If page is 1, replace all images
-      if (page === 1) return images;
-
-      // Otherwise, merge new images, avoiding duplicates
-      const existingIds = new Set(prev.map((img) => img.id));
-      const newImages = images.filter((img) => !existingIds.has(img.id));
-      return [...prev, ...newImages];
-    });
-    setIsLoading(false);
-  }, [images, page]);
-
-  const onPageChange = useCallback(
-    (action: "next" | "prev") => {
-      if (isLoading) return;
-
-      const pageValue = action === "next" ? Number(page) + 1 : Number(page) - 1;
-
-      setIsLoading(true);
-
-      const newUrl = formUrlQuery({
-        searchParams: searchParams.toString(),
-        key: "page",
-        value: pageValue,
-      });
-
-      router.push(newUrl, { scroll: false });
-    },
-    [page, router, searchParams, isLoading]
-  );
+  const {
+    allImages,
+    isLoading,
+    offset,
+    loadMoreImages,
+  } = useImageCollection({
+    type,
+    userId,
+    searchQuery,
+    initialImages,
+    limit: NUMBER_OF_IMAGES_TO_FETCH,
+  });
 
   return (
     <>
       <header className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
         <div className="space-y-3">
-          <span className="text-xs uppercase tracking-[0.35em] text-white/60">
-            Live gallery
-          </span>
           <p className="max-w-2xl text-sm leading-6 text-white/60">
             Scroll through the freshest AI-powered transformations in a
             continuous feed.
@@ -98,9 +70,9 @@ export const Collection = ({
           </ul>
 
           <AutoScrollLoader
-            page={page}
-            totalPages={totalPages}
-            onLoadMore={() => onPageChange("next")}
+            offset={offset}
+            totalImageCount={totalImageCount}
+            onLoadMore={loadMoreImages}
             isLoading={isLoading}
           />
         </>
@@ -134,7 +106,7 @@ export const Collection = ({
   );
 };
 
-const SkeletonCards = ({ count }: { count: number }) => {
+export const SkeletonCards = ({ count }: { count: number }) => {
   return (
     <>
       {Array.from({ length: count }).map((_, index) => (
@@ -224,31 +196,35 @@ const Card = ({ image }: { image: any }) => {
 };
 
 type AutoScrollLoaderProps = {
-  page: number;
-  totalPages: number;
-  onLoadMore: () => void;
+  offset: number;
+  totalImageCount: number;
+  onLoadMore: () => Promise<void>;
   isLoading: boolean;
 };
 
 const AutoScrollLoader = ({
-  page,
-  totalPages,
+  offset,
+  totalImageCount,
   onLoadMore,
   isLoading,
 }: AutoScrollLoaderProps) => {
   const loaderRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    if (page >= totalPages || isLoading) return;
+    if (offset + 1 >= totalImageCount || isLoading) return;
 
     const node = loaderRef.current;
     if (!node) return;
 
     const observer = new IntersectionObserver(
-      (entries) => {
+      async (entries) => {
         const entry = entries[0];
-        if (entry?.isIntersecting && !isLoading && page < totalPages) {
-          onLoadMore();
+        if (
+          entry?.isIntersecting &&
+          !isLoading &&
+          offset + 1 < totalImageCount
+        ) {
+          await onLoadMore();
         }
       },
       { rootMargin: "0px 0px 400px 0px", threshold: 0.1 }
@@ -256,10 +232,12 @@ const AutoScrollLoader = ({
 
     observer.observe(node);
 
-    return () => observer.disconnect();
-  }, [page, totalPages, onLoadMore, isLoading]);
+    return () => {
+      observer.disconnect();
+    };
+  }, [offset, totalImageCount, isLoading, onLoadMore]);
 
-  if (page >= totalPages) {
+  if (offset + 1 >= totalImageCount) {
     return (
       <div className="mt-10 flex justify-center py-6">
         <span className="text-sm text-white/40">
