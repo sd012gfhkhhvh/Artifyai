@@ -24,7 +24,7 @@ export const ScrollStackItem: React.FC<ScrollStackItemProps> = ({
 interface ScrollStackProps {
   className?: string;
   children: ReactNode;
-  scrollRef?: React.RefObject<HTMLDivElement>;
+  scrollRef: React.RefObject<HTMLDivElement>;
   itemDistance?: number;
   itemScale?: number;
   itemStackDistance?: number;
@@ -54,7 +54,7 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
   useWindowScroll = false,
   onStackComplete,
 }) => {
-  const scrollerRef = scrollRef || useRef<HTMLDivElement>(null);
+  const scrollerRef = scrollRef;
   const stackCompletedRef = useRef(false);
   const animationFrameRef = useRef<number | null>(null);
   const lenisRef = useRef<Lenis | null>(null);
@@ -96,7 +96,7 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
         scrollContainer: scroller,
       };
     }
-  }, [useWindowScroll]);
+  }, [useWindowScroll, scrollerRef]);
 
   const getElementOffset = useCallback(
     (element: HTMLElement) => {
@@ -215,6 +215,7 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
 
     isUpdatingRef.current = false;
   }, [
+    scrollerRef,
     itemScale,
     itemStackDistance,
     stackPosition,
@@ -288,7 +289,7 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
       lenisRef.current = lenis;
       return lenis;
     }
-  }, [handleScroll, useWindowScroll]);
+  }, [handleScroll, useWindowScroll, scrollerRef]);
 
   useLayoutEffect(() => {
     if (!useWindowScroll && !scrollerRef.current) return;
@@ -331,6 +332,7 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
       isUpdatingRef.current = false;
     };
   }, [
+    scrollerRef,
     itemDistance,
     itemScale,
     itemStackDistance,

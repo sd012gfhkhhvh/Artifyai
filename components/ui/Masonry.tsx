@@ -1,5 +1,6 @@
 "use client";
 import React, {
+  useCallback,
   useEffect,
   useLayoutEffect,
   useMemo,
@@ -13,11 +14,11 @@ const useMedia = (
   values: number[],
   defaultValue: number
 ): number => {
-  const get = () => {
+  const get = useCallback(() => {
     if (typeof window === "undefined") return defaultValue;
     const index = queries.findIndex((q) => window.matchMedia(q).matches);
     return values[index] ?? defaultValue;
-  };
+  }, [queries, values, defaultValue]);
 
   const [value, setValue] = useState<number>(get);
 
@@ -30,7 +31,7 @@ const useMedia = (
     mqls.forEach((mql) => mql.addEventListener("change", handler));
     return () =>
       mqls.forEach((mql) => mql.removeEventListener("change", handler));
-  }, [queries]);
+  }, [queries, get]);
 
   return value;
 };
@@ -116,36 +117,39 @@ const Masonry: React.FC<MasonryProps> = ({
   const [containerRef, { width }] = useMeasure<HTMLDivElement>();
   const [imagesReady, setImagesReady] = useState(false);
 
-  const getInitialPosition = (item: GridItem) => {
-    const containerRect = containerRef.current?.getBoundingClientRect();
-    if (!containerRect) return { x: item.x, y: item.y };
+  const getInitialPosition = useCallback(
+    (item: GridItem) => {
+      const containerRect = containerRef.current?.getBoundingClientRect();
+      if (!containerRect) return { x: item.x, y: item.y };
 
-    let direction = animateFrom;
-    if (animateFrom === "random") {
-      const dirs = ["top", "bottom", "left", "right"];
-      direction = dirs[
-        Math.floor(Math.random() * dirs.length)
-      ] as typeof animateFrom;
-    }
+      let direction = animateFrom;
+      if (animateFrom === "random") {
+        const dirs = ["top", "bottom", "left", "right"];
+        direction = dirs[
+          Math.floor(Math.random() * dirs.length)
+        ] as typeof animateFrom;
+      }
 
-    switch (direction) {
-      case "top":
-        return { x: item.x, y: -200 };
-      case "bottom":
-        return { x: item.x, y: window.innerHeight + 200 };
-      case "left":
-        return { x: -200, y: item.y };
-      case "right":
-        return { x: window.innerWidth + 200, y: item.y };
-      case "center":
-        return {
-          x: containerRect.width / 2 - item.w / 2,
-          y: containerRect.height / 2 - item.h / 2,
-        };
-      default:
-        return { x: item.x, y: item.y + 100 };
-    }
-  };
+      switch (direction) {
+        case "top":
+          return { x: item.x, y: -200 };
+        case "bottom":
+          return { x: item.x, y: window.innerHeight + 200 };
+        case "left":
+          return { x: -200, y: item.y };
+        case "right":
+          return { x: window.innerWidth + 200, y: item.y };
+        case "center":
+          return {
+            x: containerRect.width / 2 - item.w / 2,
+            y: containerRect.height / 2 - item.h / 2,
+          };
+        default:
+          return { x: item.x, y: item.y + 100 };
+      }
+    },
+    [animateFrom, containerRef]
+  );
 
   useEffect(() => {
     preloadImages(items.map((i) => i.img)).then(() => setImagesReady(true));
@@ -210,7 +214,16 @@ const Masonry: React.FC<MasonryProps> = ({
     });
 
     hasMounted.current = true;
-  }, [grid, imagesReady, stagger, animateFrom, blurToFocus, duration, ease]);
+  }, [
+    grid,
+    imagesReady,
+    stagger,
+    animateFrom,
+    blurToFocus,
+    duration,
+    ease,
+    getInitialPosition,
+  ]);
 
   const handleMouseEnter = (id: string, element: HTMLElement) => {
     if (scaleOnHover) {

@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 import { BentoCard, BentoGrid } from "./ui/bento-grid";
 // icon imports
 import {
@@ -16,7 +17,7 @@ const features = [
     description: "We automatically save your files as you type.",
     href: "/",
     cta: "Learn more",
-    background: <img className="absolute -top-20 -right-20 opacity-60" />,
+    background: <div className="absolute -top-20 -right-20 opacity-60" />,
     className: "lg:row-start-1 lg:row-end-4 lg:col-start-2 lg:col-end-3",
   },
   {
@@ -26,9 +27,11 @@ const features = [
     href: "/",
     cta: "Learn more",
     background: (
-      <img
+      <Image
         src="https://imgs.search.brave.com/g6vele790Z8F74QlGF8reljgCUiLqxtiA05BcaS_aEg/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/cHJlbWl1bS12ZWN0/b3IvcHJvZHVjdC1k/ZW1vLWNsaWVudHNf/MTA4MDYxLTIyNDEu/anBnP3NlbXQ9YWlz/X2h5YnJpZCZ3PTc0/MCZxPTgw"
-        className="absolute -top-0 -right-0 opacity-60"
+        alt="Full text search demo"
+        fill
+        className="object-cover opacity-60"
       />
     ),
     className: "lg:col-start-1 lg:col-end-2 lg:row-start-1 lg:row-end-3",
@@ -40,9 +43,11 @@ const features = [
     href: "/",
     cta: "Learn more",
     background: (
-      <img
+      <Image
         src="https://imgs.search.brave.com/g6vele790Z8F74QlGF8reljgCUiLqxtiA05BcaS_aEg/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/cHJlbWl1bS12ZWN0/b3IvcHJvZHVjdC1k/ZW1vLWNsaWVudHNf/MTA4MDYxLTIyNDEu/anBnP3NlbXQ9YWlz/X2h5YnJpZCZ3PTc0/MCZxPTgw"
-        className="absolute -top-0 -right-0 opacity-60"
+        alt="Multilingual support demo"
+        fill
+        className="object-cover opacity-60"
       />
     ),
     className: "lg:col-start-1 lg:col-end-2 lg:row-start-3 lg:row-end-4",
@@ -53,7 +58,7 @@ const features = [
     description: "Use the calendar to filter your files by date.",
     href: "/",
     cta: "Learn more",
-    background: <img className="absolute -top-20 -right-20 opacity-60" />,
+    background: <div className="absolute -top-20 -right-20 opacity-60" />,
     className: "lg:col-start-3 lg:col-end-3 lg:row-start-1 lg:row-end-2",
   },
   {
@@ -63,7 +68,7 @@ const features = [
       "Get notified when someone shares a file or mentions you in a comment.",
     href: "/",
     cta: "Learn more",
-    background: <img className="absolute -top-20 -right-20 opacity-60" />,
+    background: <div className="absolute -top-20 -right-20 opacity-60" />,
     className: "lg:col-start-3 lg:col-end-3 lg:row-start-2 lg:row-end-4",
   },
 ];

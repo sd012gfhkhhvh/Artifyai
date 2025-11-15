@@ -17,7 +17,27 @@ const nextConfig = {
                 protocol: 'https',
                 hostname: 'images.unsplash.com',
                 port: ''
-            }
+            },
+            {
+                protocol: 'https',
+                hostname: 'imgs.search.brave.com',
+                port: ''
+            },
+            {
+                protocol: 'https',
+                hostname: 'avatar.vercel.sh',
+                port: ''
+            },
+            {
+                protocol: 'https',
+                hostname: 'picsum.photos',
+                port: ''
+            },
+            {
+                protocol: 'https',
+                hostname: 'webinarninja.com',
+                port: ''
+            },
         ]
     }
 };

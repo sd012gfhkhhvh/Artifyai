@@ -88,12 +88,10 @@ export function AppSidebar() {
     state,
   } = useSidebar();
   const isMobile = useIsMobile();
-  const { isSignedIn, user } = useUser();
+  const { user } = useUser();
   const { signOut } = useClerk();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
-
-  if (!isSignedIn) return null;
 
   const handleSignOut = () => {
     setIsLoading(true);
@@ -118,7 +116,7 @@ export function AppSidebar() {
       {isLoading && <LoaderCircular message="Signing out..." />}
 
       {/* header */}
-      <SidebarHeader>
+      {/* <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
             <DropdownMenu>
@@ -132,7 +130,7 @@ export function AppSidebar() {
               <DropdownMenuContent
                 side={isMobile ? "bottom" : "right"}
                 sideOffset={15}
-                className="p w-[--radix-popper-anchor-width]"
+                className={`${!isMobile ? "mt-2" : ""} min-w-[15rem]`}
               >
                 <DropdownMenuItem className="p-0">
                   <SidebarMenuButton>
@@ -150,12 +148,12 @@ export function AppSidebar() {
             </DropdownMenu>
           </SidebarMenuItem>
         </SidebarMenu>
-      </SidebarHeader>
+      </SidebarHeader> */}
 
       <SidebarSeparator />
 
       {/* Dashboard content group */}
-      <SidebarContent>
+      {/* <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Dashboard</SidebarGroupLabel>
           <SidebarGroupContent>
@@ -171,14 +169,23 @@ export function AppSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
-      </SidebarContent>
+      </SidebarContent> */}
 
       {/* Tools content group */}
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Tools</SidebarGroupLabel>
+          <SidebarGroupLabel>Dashboard</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link href={"/"}>
+                    <Home />
+                    <span>Home</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarSeparator />
               {Tools.map((item) => (
                 <SidebarMenuItem key={item.label}>
                   <SidebarMenuButton asChild>
@@ -193,28 +200,6 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-
-      {/* Theme toggle group */}
-      {/* {!isSidebarOpen && !openMobile && (
-        <SidebarContent>
-          <SidebarGroup>
-            <SidebarGroupLabel>Theme</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    <ThemeToggle
-                      size={"sm"}
-                      dropDownItemClassName="hover:bg-sidebar-accent"
-                      className="rounded-xl border-none bg-inherit hover:bg-sidebar-accent w-full"
-                    />
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        </SidebarContent>
-      )} */}
 
       {/* footer */}
       <SidebarFooter>
@@ -237,6 +222,7 @@ export function AppSidebar() {
                 } flex rounded-md  justify-around items-center`}
               >
                 {user?.imageUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element
                   <img
                     src={user?.imageUrl}
                     alt={user?.firstName || "User"}
@@ -258,7 +244,7 @@ export function AppSidebar() {
               <DropdownMenuContent
                 side={isMobile ? "bottom" : "right"}
                 sideOffset={15}
-                className=""
+                className={`${!isMobile ? "mb-2" : ""} min-w-[15rem]`}
               >
                 <DropdownMenuItem className="hover:bg-sidebar-accent">
                   <UserButton afterSignOutUrl="/" showName={true} />

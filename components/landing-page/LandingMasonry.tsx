@@ -76,7 +76,7 @@ const LandingMasonry = ({ itemsToShow = 5 }: { itemsToShow: number }) => {
 
   useEffect(() => {
     setCurrItems(items.slice(0, itemsToShow));
-  }, [items, itemsToShow]);
+  }, [itemsToShow]);
 
   return (
     <Masonry
