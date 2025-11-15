@@ -13,62 +13,197 @@ import {
 const features = [
   {
     Icon: FileTextIcon,
-    name: "Save your files",
-    description: "We automatically save your files as you type.",
-    href: "/",
-    cta: "Learn more",
-    background: <div className="absolute -top-20 -right-20 opacity-60" />,
+    name: "AI-Powered Transformations",
+    description: "Watch your images transform in real-time with cutting-edge AI technology.",
+    href: "/transformations/add/restore",
+    cta: "Try Now",
+    background: (
+      <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 via-pink-600/20 to-violet-600/20">
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="relative w-full h-full">
+            {/* Animated gradient orbs */}
+            <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-purple-500/30 rounded-full blur-3xl animate-pulse" />
+            <div className="absolute bottom-1/4 right-1/4 w-40 h-40 bg-pink-500/30 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="text-center space-y-4">
+                <div className="text-6xl animate-bounce">✨</div>
+                <div className="text-sm text-white/60 font-semibold">AI Magic in Action</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    ),
     className: "lg:row-start-1 lg:row-end-4 lg:col-start-2 lg:col-end-3",
   },
   {
     Icon: InputIcon,
-    name: "Full text search",
-    description: "Search through all your files in one place.",
+    name: "Lightning Fast Processing",
+    description: "Get professional results in seconds, not hours.",
     href: "/",
-    cta: "Learn more",
+    cta: "See Speed",
     background: (
-      <Image
-        src="https://imgs.search.brave.com/g6vele790Z8F74QlGF8reljgCUiLqxtiA05BcaS_aEg/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/cHJlbWl1bS12ZWN0/b3IvcHJvZHVjdC1k/ZW1vLWNsaWVudHNf/MTA4MDYxLTIyNDEu/anBnP3NlbXQ9YWlz/X2h5YnJpZCZ3PTc0/MCZxPTgw"
-        alt="Full text search demo"
-        fill
-        className="object-cover opacity-60"
-      />
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 to-cyan-600/20">
+        <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
+          {/* Speed lines animation */}
+          <div className="relative w-full h-full">
+            {[...Array(6)].map((_, i) => (
+              <div
+                key={i}
+                className="absolute h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent rounded-full"
+                style={{
+                  top: `${15 + i * 15}%`,
+                  left: '-100%',
+                  width: '200%',
+                  animation: `slideRight 2s ease-in-out infinite`,
+                  animationDelay: `${i * 0.2}s`,
+                  opacity: 0.6 - i * 0.1,
+                }}
+              />
+            ))}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="text-5xl">⚡</div>
+            </div>
+          </div>
+        </div>
+        <style jsx>{`
+          @keyframes slideRight {
+            0% { transform: translateX(-50%); }
+            100% { transform: translateX(50%); }
+          }
+        `}</style>
+      </div>
     ),
     className: "lg:col-start-1 lg:col-end-2 lg:row-start-1 lg:row-end-3",
   },
   {
     Icon: GlobeIcon,
-    name: "Multilingual",
-    description: "Supports 100+ languages and counting.",
+    name: "Batch Processing",
+    description: "Transform multiple images at once with our bulk tools.",
     href: "/",
-    cta: "Learn more",
+    cta: "Learn More",
     background: (
-      <Image
-        src="https://imgs.search.brave.com/g6vele790Z8F74QlGF8reljgCUiLqxtiA05BcaS_aEg/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/cHJlbWl1bS12ZWN0/b3IvcHJvZHVjdC1k/ZW1vLWNsaWVudHNf/MTA4MDYxLTIyNDEu/anBnP3NlbXQ9YWlz/X2h5YnJpZCZ3PTc0/MCZxPTgw"
-        alt="Multilingual support demo"
-        fill
-        className="object-cover opacity-60"
-      />
+      <div className="absolute inset-0 bg-gradient-to-br from-green-600/20 to-emerald-600/20">
+        <div className="absolute inset-0 flex items-center justify-center p-6">
+          <div className="grid grid-cols-3 gap-3 w-full max-w-[200px]">
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => (
+              <div
+                key={i}
+                className="aspect-square bg-gradient-to-br from-green-500/30 to-emerald-500/30 rounded-lg border border-green-500/30"
+                style={{
+                  animation: `fadeInScale 0.5s ease-out forwards`,
+                  animationDelay: `${i * 0.1}s`,
+                  opacity: 0,
+                }}
+              >
+                <div className="w-full h-full flex items-center justify-center text-xs text-white/40">
+                  {i}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <style jsx>{`
+          @keyframes fadeInScale {
+            0% {
+              opacity: 0;
+              transform: scale(0.5);
+            }
+            100% {
+              opacity: 1;
+              transform: scale(1);
+            }
+          }
+        `}</style>
+      </div>
     ),
     className: "lg:col-start-1 lg:col-end-2 lg:row-start-3 lg:row-end-4",
   },
   {
     Icon: CalendarIcon,
-    name: "Calendar",
-    description: "Use the calendar to filter your files by date.",
+    name: "Export Options",
+    description: "Download in any format with customizable quality settings.",
     href: "/",
-    cta: "Learn more",
-    background: <div className="absolute -top-20 -right-20 opacity-60" />,
+    cta: "Explore",
+    background: (
+      <div className="absolute inset-0 bg-gradient-to-br from-orange-600/20 to-red-600/20">
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="space-y-3">
+            <div className="flex items-center justify-center gap-3">
+              {['PNG', 'JPG', 'WEBP'].map((format, i) => (
+                <div
+                  key={format}
+                  className="px-4 py-2 bg-gradient-to-br from-orange-500/30 to-red-500/30 rounded-lg border border-orange-500/30 text-xs font-semibold text-white"
+                  style={{
+                    animation: 'float 3s ease-in-out infinite',
+                    animationDelay: `${i * 0.3}s`,
+                  }}
+                >
+                  {format}
+                </div>
+              ))}
+            </div>
+            <div className="text-center">
+              <div className="text-3xl">📥</div>
+            </div>
+          </div>
+        </div>
+        <style jsx>{`
+          @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+          }
+        `}</style>
+      </div>
+    ),
     className: "lg:col-start-3 lg:col-end-3 lg:row-start-1 lg:row-end-2",
   },
   {
     Icon: BellIcon,
-    name: "Notifications",
-    description:
-      "Get notified when someone shares a file or mentions you in a comment.",
+    name: "API Integration",
+    description: "Integrate our powerful AI into your own applications.",
     href: "/",
-    cta: "Learn more",
-    background: <div className="absolute -top-20 -right-20 opacity-60" />,
+    cta: "View Docs",
+    background: (
+      <div className="absolute inset-0 bg-gradient-to-br from-violet-600/20 to-purple-600/20">
+        <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
+          {/* Code-like animation */}
+          <div className="space-y-2 w-full px-6">
+            {[
+              'POST /api/transform',
+              'Authorization: Bearer ***',
+              'Content-Type: image/jpeg',
+              '{ "action": "restore" }',
+              '✓ Success: 200 OK',
+            ].map((line, i) => (
+              <div
+                key={i}
+                className="text-[10px] font-mono text-white/40 bg-black/20 px-3 py-2 rounded border border-purple-500/20"
+                style={{
+                  animation: 'slideInLeft 0.5s ease-out forwards',
+                  animationDelay: `${i * 0.2}s`,
+                  opacity: 0,
+                }}
+              >
+                {line}
+              </div>
+            ))}
+          </div>
+        </div>
+        <style jsx>{`
+          @keyframes slideInLeft {
+            0% {
+              opacity: 0;
+              transform: translateX(-20px);
+            }
+            100% {
+              opacity: 1;
+              transform: translateX(0);
+            }
+          }
+        `}</style>
+      </div>
+    ),
     className: "lg:col-start-3 lg:col-end-3 lg:row-start-2 lg:row-end-4",
   },
 ];

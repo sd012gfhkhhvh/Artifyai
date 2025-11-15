@@ -229,8 +229,13 @@ const Masonry: React.FC<MasonryProps> = ({
     if (scaleOnHover) {
       gsap.to(`[data-key="${id}"]`, {
         scale: hoverScale,
-        duration: 0.3,
+        duration: 0.4,
         ease: "power2.out",
+      });
+      // Add subtle glow effect
+      gsap.to(`[data-key="${id}"] .masonry-overlay`, {
+        opacity: 1,
+        duration: 0.3,
       });
     }
     if (colorShiftOnHover) {
@@ -243,8 +248,13 @@ const Masonry: React.FC<MasonryProps> = ({
     if (scaleOnHover) {
       gsap.to(`[data-key="${id}"]`, {
         scale: 1,
-        duration: 0.3,
+        duration: 0.4,
         ease: "power2.out",
+      });
+      // Remove glow effect
+      gsap.to(`[data-key="${id}"] .masonry-overlay`, {
+        opacity: 0,
+        duration: 0.3,
       });
     }
     if (colorShiftOnHover) {
@@ -259,18 +269,51 @@ const Masonry: React.FC<MasonryProps> = ({
         <div
           key={item.id}
           data-key={item.id}
-          className="absolute box-content"
+          className="absolute box-content cursor-pointer group"
           style={{ willChange: "transform, width, height, opacity" }}
           onClick={() => window.open(item.url, "_blank", "noopener")}
           onMouseEnter={(e) => handleMouseEnter(item.id, e.currentTarget)}
           onMouseLeave={(e) => handleMouseLeave(item.id, e.currentTarget)}
         >
           <div
-            className="relative w-full h-full bg-cover bg-center rounded-[10px] shadow-[0px_10px_50px_-10px_rgba(0,0,0,0.2)] uppercase text-[10px] leading-[10px]"
+            className="relative w-full h-full bg-cover bg-center rounded-xl shadow-[0px_10px_50px_-10px_rgba(0,0,0,0.2)] overflow-hidden transition-shadow duration-300 hover:shadow-[0px_20px_70px_-10px_rgba(0,0,0,0.3)]"
             style={{ backgroundImage: `url(${item.img})` }}
           >
+            {/* Hover Overlay with Gradient */}
+            <div className="masonry-overlay absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/0 opacity-0 transition-opacity duration-300 pointer-events-none">
+              <div className="absolute bottom-4 left-4 right-4">
+                <div className="flex items-center gap-2">
+                  <svg
+                    className="w-4 h-4 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                    />
+                  </svg>
+                  <span className="text-white text-xs font-medium">View</span>
+                </div>
+              </div>
+            </div>
+            
+            {/* Animated Border Shine Effect */}
+            <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+              <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-transparent via-white/20 to-transparent animate-[shine_2s_ease-in-out_infinite]" />
+            </div>
+
             {colorShiftOnHover && (
-              <div className="color-overlay absolute inset-0 rounded-[10px] bg-gradient-to-tr from-pink-500/50 to-sky-500/50 opacity-0 pointer-events-none" />
+              <div className="color-overlay absolute inset-0 rounded-xl bg-gradient-to-tr from-purple-500/50 to-pink-500/50 opacity-0 pointer-events-none transition-opacity duration-300" />
             )}
           </div>
         </div>

@@ -1,6 +1,8 @@
+"use client";
 import Image from "next/image";
 import React from "react";
 import { SignInButton, SignUpButton } from "@clerk/nextjs";
+import { motion } from "framer-motion";
 
 // UI imports
 import { FileUpload } from "@/components/ui/file-upload";
@@ -8,13 +10,51 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 export const LandingHero = () => {
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.5 }
+    }
+  };
+
+  const imageVariants = {
+    hidden: { opacity: 0, scale: 0.8 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: { duration: 0.6 }
+    }
+  };
+
   return (
     <div className="container flex min-h-[70vh] md:min-h-[85vh] items-stretch justify-center px-4 sm:px-6">
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 md:gap-12 items-stretch w-full max-w-7xl">
         {/* Left side - Hero content */}
-        <div className="flex flex-col items-center xl:items-start justify-center text-left space-y-4 md:space-y-6">
+        <motion.div
+          className="flex flex-col items-center xl:items-start justify-center text-left space-y-4 md:space-y-6"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
           {/* image */}
-          <div className="w-[20rem] sm:w-[28rem] md:w-[32rem] lg:w-[36rem] xl:w-[28rem]">
+          <motion.div
+            className="w-[20rem] sm:w-[28rem] md:w-[32rem] lg:w-[36rem] xl:w-[28rem]"
+            variants={imageVariants}
+          >
             <Image
               src="/assets/images/hero.webp"
               alt="dummy image"
@@ -22,20 +62,26 @@ export const LandingHero = () => {
               height={300}
               className="w-full"
             />
-          </div>
+          </motion.div>
 
-          <h1 className="text-3xl text-center xl:text-left sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold leading-tight">
+          <motion.h1
+            className="text-3xl text-center xl:text-left sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold leading-tight"
+            variants={itemVariants}
+          >
             Unleash Your{" "}
             <span className="bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent">
               Creativity
             </span>{" "}
             with AI
-          </h1>
+          </motion.h1>
           {/* <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-xl leading-relaxed">
                     Transform your ideas into stunning visuals in seconds.
                     Professional-grade AI image generation at your fingertips.
                   </p> */}
-          <div className="flex flex-col sm:flex-row flex-wrap gap-3 md:gap-4 pt-2 md:pt-4 w-full sm:w-auto">
+          <motion.div
+            className="flex flex-col sm:flex-row flex-wrap gap-3 md:gap-4 pt-2 md:pt-4 w-full sm:w-auto"
+            variants={itemVariants}
+          >
             <Button
               size="lg"
               className="w-full sm:w-auto bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white shadow-lg shadow-purple-500/25 hover:shadow-xl hover:shadow-purple-500/30 transition-all text-sm md:text-base"
@@ -65,8 +111,11 @@ export const LandingHero = () => {
             >
               <Link href="/sign-in">Sign In</Link>
             </Button>
-          </div>
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-8 pt-2 md:pt-4 text-xs sm:text-sm text-muted-foreground">
+          </motion.div>
+          <motion.div
+            className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-8 pt-2 md:pt-4 text-xs sm:text-sm text-muted-foreground"
+            variants={itemVariants}
+          >
             <div className="flex items-center gap-2">
               <svg
                 className="w-4 h-4 md:w-5 md:h-5 text-green-500 flex-shrink-0"
@@ -95,11 +144,16 @@ export const LandingHero = () => {
               </svg>
               <span>Free trial available</span>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
         {/* Right side - Image upload area */}
-        <div className="flex items-end justify-center mt-8 lg:mt-0">
+        <motion.div
+          className="flex items-end justify-center mt-8 lg:mt-0"
+          initial={{ opacity: 0, x: 40 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+        >
           <div className="w-full max-w-md px-4 sm:px-0">
             <div className="inline-block pb-10 w-full text-center">
               <span className="px-3 py-1.5 md:px-4 md:py-2 rounded-full bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/20 text-xs md:text-sm font-medium text-purple-600 dark:text-purple-400">
@@ -196,7 +250,7 @@ export const LandingHero = () => {
               </p>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   );

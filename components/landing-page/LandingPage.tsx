@@ -1,117 +1,65 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 import Image from "next/image";
-
-// clerk imports
-import { SignInButton, SignUpButton } from "@clerk/nextjs";
+import { motion } from "framer-motion";
 
 // hook imports
 import { useIsMobile, useIsTablet } from "@/hooks/use-mobile";
 
 // component imports
 import { LandingNav } from "@/components/landing-page/LandingNav";
-import { MarqueeDemo } from "@/components/landing-page/MarqueeDemo";
 import { UsecaseTabs } from "@/components/landing-page/UsecaseTabs";
 import Brand from "@/components/shared/Brand";
-
-// UI imports
-import ScrollStack, { ScrollStackItem } from "@/components/ui/ScrollStack";
-import { BentoCard, BentoGrid } from "@/components/ui/bento-grid";
-import { Button } from "@/components/ui/button";
-import LiquidEther from "@/components/shared/Hero";
-
-// icon imports
-import {
-  BellIcon,
-  CalendarIcon,
-  FileTextIcon,
-  GlobeIcon,
-  InputIcon,
-} from "@radix-ui/react-icons";
 import { LandingHero } from "./LandingHero";
 import { ProductDemoVideo } from "./ProductDemoVIdeo";
 import LandingMasonry from "./LandingMasonry";
 import { Features } from "./Features";
 import { ProductDemoBento } from "../ProductDemoBento";
+import { HowItWorks } from "./HowItWorks";
+import { TestimonialsNew } from "./TestimonialsNew";
+import { InteractiveStats } from "./InteractiveStats";
+import { ParallaxCTA } from "./ParallaxCTA";
+import { LiveTransformations } from "./LiveTransformations";
+import { AnimatedProductDemo } from "./AnimatedProductDemo";
+import { Pricing } from "./Pricing";
+import { FAQ } from "./FAQ";
+import { CTA } from "./CTA";
+
+// UI imports
+import LiquidEther from "@/components/shared/Hero";
 
 export const LandingPage = () => {
   const isMobile = useIsMobile();
   const isTablet = useIsTablet();
-  const [isScrollComplete, setIsScrollComplete] = useState(false);
-  const [windowScroll, setWindowScroll] = useState(false);
 
-  const onStackComplete = () => {
-    console.log("stack completed");
-
-    // setIsScrollComplete(true);
-    // setWindowScroll(true);
+  // Animation variants for smooth scroll animations
+  const fadeInUp = {
+    hidden: { opacity: 0, y: 40 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.5, ease: "easeOut" },
+    },
   };
 
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const el = ref.current;
-
-    if (!el) return;
-
-    let touchStartY = 0;
-    let lastTouchY = 0;
-
-    const handleWheel = (event: WheelEvent) => {
-      const { scrollTop, scrollHeight, clientHeight } = el;
-      const isAtTop = scrollTop === 0;
-      const isAtBottom = scrollTop + clientHeight >= scrollHeight;
-
-      // When at top and scrolling up OR at bottom and scrolling down:
-      if ((isAtTop && event.deltaY < 0) || (isAtBottom && event.deltaY > 0)) {
-        setWindowScroll(true);
-      } else {
-        setWindowScroll(false);
-        event.preventDefault(); // Prevent default scroll for smoothness
-      }
-    };
-
-    const handleTouchStart = (event: TouchEvent) => {
-      touchStartY = event.touches[0].clientY;
-      lastTouchY = touchStartY;
-    };
-
-    const handleTouchMove = (event: TouchEvent) => {
-      const touchCurrentY = event.touches[0].clientY;
-      const deltaY = lastTouchY - touchCurrentY; // Positive for scrolling down, negative for up
-      const { scrollTop, scrollHeight, clientHeight } = el;
-      const isAtTop = scrollTop <= 0;
-      const isAtBottom = scrollTop + clientHeight >= scrollHeight - 1;
-
-      // When at top and scrolling up (deltaY < 0) OR at bottom and scrolling down (deltaY > 0):
-      if ((isAtTop && deltaY < 0) || (isAtBottom && deltaY > 0)) {
-        setWindowScroll(true);
-      } else {
-        setWindowScroll(false);
-        event.preventDefault(); // Prevent default scroll for smoothness
-      }
-
-      lastTouchY = touchCurrentY;
-    };
-
-    el.addEventListener("wheel", handleWheel, { passive: false });
-    el.addEventListener("touchstart", handleTouchStart, { passive: true });
-    el.addEventListener("touchmove", handleTouchMove, { passive: false });
-
-    return () => {
-      el.removeEventListener("wheel", handleWheel);
-      el.removeEventListener("touchstart", handleTouchStart);
-      el.removeEventListener("touchmove", handleTouchMove);
-    };
-  }, [setWindowScroll]);
+  const staggerContainer = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.08,
+        delayChildren: 0.1,
+      },
+    },
+  };
 
   return (
     <>
-      <div className="h-full w-full">
+      <div className="min-h-screen w-full">
         <LandingNav />
-        <main className="py-4 md:py-4 space-y-4">
+        <main className="py-4 md:py-4 space-y-4 overflow-x-hidden">
           {/* background effect */}
-          <div className="fixed inset-0 w-screen h-screen -z-10">
+          {/* <div className="fixed inset-0 w-screen h-screen -z-10">
             <LiquidEther
               colors={["#5227FF", "#FF9FFC", "#B19EEF"]}
               mouseForce={20}
@@ -129,27 +77,41 @@ export const LandingPage = () => {
               autoResumeDelay={3000}
               autoRampDuration={0.6}
             />
-          </div>
+          </div> */}
 
           {/* hero section pitch + cta */}
           <section className="px-4">
             <LandingHero />
           </section>
 
+          {/* Animated Product Demo with Video - NEW SECTION */}
+          <AnimatedProductDemo />
+
           {/* masonry demo */}
-          <section className="relative px-8 md:px-0 pb-[800px] md:pb-[700px]">
+          <motion.section
+            className="relative px-8 md:px-0 pb-[800px] md:pb-[700px]"
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.5 }}
+          >
             <div className="container py-10 md:py-20"></div>
             <div className="absolute inset-x-0 top-10 md:top-25 h-80 bg-gradient-to-b from-background via-background/70 to-transparent z-10 pointer-events-none"></div>
             <div className="absolute inset-x-0 bottom-0 md:bottom-10 h-80 bg-gradient-to-t from-background via-background/70 to-transparent z-10 pointer-events-none"></div>
 
-            <LandingMasonry itemsToShow={isMobile ? 7 : (isTablet ? 8 : 10)} />
-          </section>
+            <LandingMasonry itemsToShow={isMobile ? 7 : isTablet ? 8 : 10} />
+          </motion.section>
 
           {/* product demo video */}
-          <section className="px-8">
+          {/* <motion.section
+            className="px-8"
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.5 }}
+          >
             <div className="container py-10 md:py-20"></div>
             <div className="max-w-7xl mx-auto">
-              {/* heading */}
               <div className="text-center mb-8 md:mb-12 max-w-4xl mx-auto">
                 <p className="text-h1">
                   <span className="bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent">
@@ -166,10 +128,16 @@ export const LandingPage = () => {
               </div>
               <ProductDemoVideo />
             </div>
-          </section>
+          </motion.section> */}
 
           {/* usecases tabs */}
-          <section className="px-8">
+          <motion.section
+            className="px-8"
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.5 }}
+          >
             <div className="container py-10 md:py-20"></div>
             <div className="max-w-7xl mx-auto">
               {/* header */}
@@ -180,70 +148,121 @@ export const LandingPage = () => {
               </div>
               <UsecaseTabs className="mt-0 w-full" />
             </div>
-          </section>
+          </motion.section>
 
           {/* feature showcase */}
-          <section className="px-8">
+          <motion.section
+            className="px-8"
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.5 }}
+          >
             <div className="container py-10 md:py-20"></div>
             <div className="max-w-7xl mx-auto space-y-24 md:space-y-32">
               <Features />
             </div>
-          </section>
+          </motion.section>
+
+          {/* Live Transformations - Breaking continuity with interactive demo */}
+          <motion.section
+            className="px-8"
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.5 }}
+          >
+            <div className="container py-10 md:py-20"></div>
+            <LiveTransformations />
+          </motion.section>
 
           {/* product demo bento */}
-          <section className="px-8">
+          <motion.section
+            className="px-8"
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.5 }}
+          >
             <div className="container py-10 md:py-20"></div>
             <div className="max-w-7xl mx-auto">
               {/* heading */}
               <div className="text-center mb-12">
-                <h2 className="text-4xl font-bold mb-4">Powerful Features</h2>
+                <h2 className="text-4xl font-bold mb-4">
+                  Powerful AI Features
+                </h2>
                 <p className="text-muted-foreground text-lg">
-                  Everything you need to create stunning AI-generated images
+                  See our AI-powered tools in action with real before & after
+                  examples
                 </p>
               </div>
               <ProductDemoBento variant="magicui" />
             </div>
-          </section>
+          </motion.section>
 
-          {/* scrollstack demo */}
-          <section className="px-8">
-            <div className="container py-20 md:py-10"></div>
-            <div className="max-w-7xl mx-auto">
-              <div className="text-center md:mb-12">
-                <h2 className="text-4xl font-bold mb-4">Powerful Features</h2>
-                <p className="text-muted-foreground text-lg">
-                  Everything you need to create stunning AI-generated images
-                </p>
-              </div>
-              <div className="h-[500px]">
-                <ScrollStack
-                  scrollRef={ref}
-                  className=""
-                  onStackComplete={onStackComplete}
-                  useWindowScroll={windowScroll}
-                >
-                  <ScrollStackItem itemClassName="border-2">
-                    <h2>Card 1</h2>
-                    <p>This is the first card in the stack</p>
-                  </ScrollStackItem>
-                  <ScrollStackItem itemClassName="border-2">
-                    <h2>Card 2</h2>
-                    <p>This is the second card in the stack</p>
-                  </ScrollStackItem>
-                  <ScrollStackItem itemClassName="border-2">
-                    <h2>Card 3</h2>
-                    <p>This is the third card in the stack</p>
-                  </ScrollStackItem>
-                </ScrollStack>
-              </div>
-            </div>
-          </section>
-
-          {/* marquee demo */}
-          <section>
+          {/* how it works - step by step */}
+          <motion.section
+            className="px-8"
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.5 }}
+          >
             <div className="container py-10 md:py-20"></div>
-            <MarqueeDemo />
+            <HowItWorks />
+          </motion.section>
+
+          {/* Interactive Stats - Simplified */}
+          <motion.section
+            className="px-8"
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.5 }}
+          >
+            <InteractiveStats />
+          </motion.section>
+
+          {/* testimonials - marquee style */}
+          <section>
+            <TestimonialsNew />
           </section>
+
+          {/* pricing */}
+          <motion.section
+            className="px-8"
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.5 }}
+          >
+            <div className="container py-10 md:py-20"></div>
+            <Pricing />
+          </motion.section>
+
+          {/* FAQ */}
+          <motion.section
+            className="px-8"
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.5 }}
+          >
+            <div className="container py-10 md:py-20"></div>
+            <FAQ />
+          </motion.section>
+
+          {/* CTA before footer */}
+          <motion.section
+            className="px-8"
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.5 }}
+          >
+            <div className="container py-10 md:py-20"></div>
+            <CTA />
+          </motion.section>
 
           {/* footer */}
           <section>

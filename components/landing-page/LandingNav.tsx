@@ -33,59 +33,72 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import Brand from "@/components/shared/Brand";
 
-const components: { title: string; href: string; description: string }[] = [
+const aiTools: { title: string; href: string; description: string }[] = [
   {
-    title: "Alert Dialog",
-    href: "/docs/primitives/alert-dialog",
-    description:
-      "A modal dialog that interrupts the user with important content and expects a response.",
+    title: "Image Restore",
+    href: "/transformations/add/restore",
+    description: "Restore and enhance old or damaged photos with AI",
   },
   {
-    title: "Hover Card",
-    href: "/docs/primitives/hover-card",
-    description:
-      "For sighted users to preview content available behind a link.",
+    title: "Background Remove",
+    href: "/transformations/add/removeBackground",
+    description: "Remove backgrounds from images instantly",
   },
   {
-    title: "Progress",
-    href: "/docs/primitives/progress",
-    description:
-      "Displays an indicator showing the completion progress of a task, typically displayed as a progress bar.",
+    title: "Object Remove",
+    href: "/transformations/add/remove",
+    description: "Erase unwanted objects from your photos",
   },
   {
-    title: "Scroll-area",
-    href: "/docs/primitives/scroll-area",
-    description: "Visually or semantically separates content.",
+    title: "Generative Fill",
+    href: "/transformations/add/fill",
+    description: "Fill and extend images with AI-generated content",
   },
   {
-    title: "Tabs",
-    href: "/docs/primitives/tabs",
-    description:
-      "A set of layered sections of content—known as tab panels—that are displayed one at a time.",
-  },
-  {
-    title: "Tooltip",
-    href: "/docs/primitives/tooltip",
-    description:
-      "A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.",
+    title: "Object Recolor",
+    href: "/transformations/add/recolor",
+    description: "Change colors of specific objects in images",
   },
 ];
 
-const allToolsItems = [
+const solutionUseCases = [
   {
-    title: "Introduction",
-    href: "/",
-    description: "Re-usable components built using Radix UI and Tailwind CSS.",
+    title: "Photographers & Creators",
+    href: "/solutions/photography",
+    description: "Enhance portraits, landscapes, and studio shoots in seconds.",
   },
   {
-    title: "Installation",
-    href: "/",
-    description: "How to install dependencies and structure your app.",
+    title: "E-commerce Teams",
+    href: "/solutions/ecommerce",
+    description: "Create consistent, on-brand product photos without a studio.",
   },
   {
-    title: "Typography",
-    href: "/",
-    description: "Styles for headings, paragraphs, lists...etc",
+    title: "Marketing & Agencies",
+    href: "/solutions/marketing",
+    description: "Produce polished campaign visuals and A/B test creative ideas.",
+  },
+  {
+    title: "Developers & Platforms",
+    href: "/solutions/platforms",
+    description: "Embed Artify AI via API for end-to-end automation.",
+  },
+];
+
+const resourcesItems = [
+  {
+    title: "Documentation",
+    href: "/docs",
+    description: "Learn how to use all features and tools",
+  },
+  {
+    title: "API Access",
+    href: "/api",
+    description: "Integrate our AI tools into your applications",
+  },
+  {
+    title: "Tutorials",
+    href: "/tutorials",
+    description: "Step-by-step guides and video tutorials",
   },
 ];
 
@@ -95,14 +108,8 @@ export function LandingNav() {
 
   if (isMobile) {
     return (
-      <header className="px-4 sm:px-6 py-4 border-b w-full flex items-center justify-between backdrop-blur-md bg-background/20 sticky top-0 z-50">
+      <header className="px-4 sm:px-6 py-4 border-b w-full flex items-center justify-between backdrop-blur-md bg-background/80 sticky top-0 z-50 shadow-sm">
         <Link href="/" className="sidebar-logo">
-          {/* <Image
-            src="/assets/images/logo.png"
-            alt="logo"
-            width={100}
-            height={28}
-          /> */}
           <Brand />
         </Link>
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -115,12 +122,6 @@ export function LandingNav() {
             <SheetHeader>
               <SheetTitle>
                 <Link href="/" onClick={() => setIsOpen(false)}>
-                  {/* <Image
-                    src="/assets/images/logo.png"
-                    alt="logo"
-                    width={100}
-                    height={28}
-                  /> */}
                   <Brand />
                 </Link>
               </SheetTitle>
@@ -130,11 +131,11 @@ export function LandingNav() {
               <Accordion type="single" collapsible className="w-full">
                 <AccordionItem value="all-tools">
                   <AccordionTrigger className="text-sm">
-                    All Tools
+                    AI Tools
                   </AccordionTrigger>
                   <AccordionContent>
                     <div className="flex flex-col space-y-2">
-                      {allToolsItems.map((item) => (
+                      {aiTools.map((item) => (
                         <MobileLink
                           key={item.title}
                           href={item.href}
@@ -146,32 +147,56 @@ export function LandingNav() {
                     </div>
                   </AccordionContent>
                 </AccordionItem>
-                <AccordionItem value="components">
+                <AccordionItem value="solutions">
                   <AccordionTrigger className="text-sm">
-                    Components
+                    Solutions
                   </AccordionTrigger>
                   <AccordionContent>
-                    <div className="flex flex-col space-y-2">
-                      {components.map((component) => (
-                        <MobileLink
-                          key={component.title}
-                          href={component.href}
-                          onOpenChange={setIsOpen}
-                        >
-                          {component.title}
-                        </MobileLink>
-                      ))}
+                    <div className="space-y-4">
+                      <div>
+                        <p className="text-xs uppercase text-muted-foreground mb-2">
+                          Use cases
+                        </p>
+                        <div className="flex flex-col space-y-2">
+                          {solutionUseCases.map((item) => (
+                            <MobileLink
+                              key={item.title}
+                              href={item.href}
+                              onOpenChange={setIsOpen}
+                            >
+                              {item.title}
+                            </MobileLink>
+                          ))}
+                        </div>
+                      </div>
+                      <div>
+                        <p className="text-xs uppercase text-muted-foreground mb-2">
+                          Resources
+                        </p>
+                        <div className="flex flex-col space-y-2">
+                          {resourcesItems.map((item) => (
+                            <MobileLink
+                              key={item.title}
+                              href={item.href}
+                              onOpenChange={setIsOpen}
+                            >
+                              {item.title}
+                            </MobileLink>
+                          ))}
+                        </div>
+                      </div>
                     </div>
                   </AccordionContent>
                 </AccordionItem>
-                <MobileLink
-                  href="/pricing"
-                  className="py-4 text-sm font-medium"
-                  onOpenChange={setIsOpen}
-                >
-                  Pricing
-                </MobileLink>
               </Accordion>
+
+              <MobileLink
+                href="/pricing"
+                className="py-4 text-sm font-medium"
+                onOpenChange={setIsOpen}
+              >
+                Pricing
+              </MobileLink>
 
               <div className="flex flex-col space-y-2">
                 <div className="flex items-center justify-between">
@@ -194,7 +219,7 @@ export function LandingNav() {
   }
 
   return (
-    <div className="md:px-6 lg:px-16 xl:px-12 2xl:px-32 py-4 border-b w-full flex items-center justify-between backdrop-blur-md bg-background/20 sticky top-0 z-50">
+    <div className="md:px-6 lg:px-16 xl:px-12 2xl:px-32 py-4 border-b w-full flex items-center justify-between backdrop-blur-md bg-background/80 sticky top-0 z-50 shadow-sm">
       <Link href="/" className="sidebar-logo">
         {/* <Image
           src="/assets/images/logo.png"
@@ -207,9 +232,9 @@ export function LandingNav() {
       <NavigationMenu>
         <NavigationMenuList>
           <NavigationMenuItem>
-            <NavigationMenuTrigger>All Tools</NavigationMenuTrigger>
+            <NavigationMenuTrigger>AI Tools</NavigationMenuTrigger>
             <NavigationMenuContent>
-              <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
+              <ul className="grid gap-3 p-4 md:w-[420px] lg:w-[520px] lg:grid-cols-[.8fr_1fr]">
                 <li className="row-span-3">
                   <NavigationMenuLink asChild>
                     <a
@@ -217,15 +242,15 @@ export function LandingNav() {
                       href="/"
                     >
                       <div className="mb-2 mt-4 text-lg font-medium">
-                        Artify AI
+                        Artify AI Suite
                       </div>
                       <p className="text-sm leading-tight text-muted-foreground">
-                        All the AI tools you need in one place.
+                        Pick the exact transformation workflow you need.
                       </p>
                     </a>
                   </NavigationMenuLink>
                 </li>
-                {allToolsItems.map((item) => (
+                {aiTools.map((item) => (
                   <ListItem
                     key={item.title}
                     href={item.href}
@@ -238,19 +263,42 @@ export function LandingNav() {
             </NavigationMenuContent>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <NavigationMenuTrigger>Components</NavigationMenuTrigger>
+            <NavigationMenuTrigger>Solutions</NavigationMenuTrigger>
             <NavigationMenuContent>
-              <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
-                {components.map((component) => (
-                  <ListItem
-                    key={component.title}
-                    title={component.title}
-                    href={component.href}
-                  >
-                    {component.description}
-                  </ListItem>
-                ))}
-              </ul>
+              <div className="grid gap-6 p-6 md:w-[520px] lg:w-[640px] lg:grid-cols-2">
+                <div>
+                  <p className="text-xs uppercase tracking-wide text-muted-foreground mb-3">
+                    Use cases
+                  </p>
+                  <ul className="space-y-3">
+                    {solutionUseCases.map((item) => (
+                      <ListItem
+                        key={item.title}
+                        href={item.href}
+                        title={item.title}
+                      >
+                        {item.description}
+                      </ListItem>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <p className="text-xs uppercase tracking-wide text-muted-foreground mb-3">
+                    Resources
+                  </p>
+                  <ul className="space-y-3">
+                    {resourcesItems.map((item) => (
+                      <ListItem
+                        key={item.title}
+                        href={item.href}
+                        title={item.title}
+                      >
+                        {item.description}
+                      </ListItem>
+                    ))}
+                  </ul>
+                </div>
+              </div>
             </NavigationMenuContent>
           </NavigationMenuItem>
           <NavigationMenuItem>
