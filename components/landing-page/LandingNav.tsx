@@ -75,7 +75,8 @@ const solutionUseCases = [
   {
     title: "Marketing & Agencies",
     href: "/solutions/marketing",
-    description: "Produce polished campaign visuals and A/B test creative ideas.",
+    description:
+      "Produce polished campaign visuals and A/B test creative ideas.",
   },
   {
     title: "Developers & Platforms",
@@ -87,17 +88,17 @@ const solutionUseCases = [
 const resourcesItems = [
   {
     title: "Documentation",
-    href: "/docs",
+    href: "#",
     description: "Learn how to use all features and tools",
   },
   {
     title: "API Access",
-    href: "/api",
+    href: "#",
     description: "Integrate our AI tools into your applications",
   },
   {
     title: "Tutorials",
-    href: "/tutorials",
+    href: "#",
     description: "Step-by-step guides and video tutorials",
   },
 ];
@@ -191,7 +192,7 @@ export function LandingNav() {
               </Accordion>
 
               <MobileLink
-                href="/pricing"
+                href="#landing-pricing"
                 className="py-4 text-sm font-medium"
                 onOpenChange={setIsOpen}
               >
@@ -221,12 +222,6 @@ export function LandingNav() {
   return (
     <div className="md:px-6 lg:px-16 xl:px-12 2xl:px-32 py-4 border-b w-full flex items-center justify-between backdrop-blur-md bg-background/80 sticky top-0 z-50 shadow-sm">
       <Link href="/" className="sidebar-logo">
-        {/* <Image
-          src="/assets/images/logo.png"
-          alt="logo"
-          width={100}
-          height={28}
-        /> */}
         <Brand />
       </Link>
       <NavigationMenu>
@@ -234,7 +229,7 @@ export function LandingNav() {
           <NavigationMenuItem>
             <NavigationMenuTrigger>AI Tools</NavigationMenuTrigger>
             <NavigationMenuContent>
-              <ul className="grid gap-3 p-4 md:w-[420px] lg:w-[520px] lg:grid-cols-[.8fr_1fr]">
+              <ul className="grid gap-3 p-4 md:w-[420px] lg:w-[600px] lg:grid-cols-[.8fr_1fr]">
                 <li className="row-span-3">
                   <NavigationMenuLink asChild>
                     <a
@@ -302,7 +297,7 @@ export function LandingNav() {
             </NavigationMenuContent>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <Link href="/pricing" legacyBehavior passHref>
+            <Link href="#landing-pricing" legacyBehavior passHref>
               <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                 Pricing
               </NavigationMenuLink>

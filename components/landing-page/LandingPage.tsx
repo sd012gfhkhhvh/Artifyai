@@ -236,7 +236,7 @@ export const LandingPage = () => {
             viewport={{ once: true, margin: "-50px" }}
             transition={{ duration: 0.5 }}
           >
-            <div className="container py-10 md:py-20"></div>
+            <div id="landing-pricing" className="container py-10 md:py-20"></div>
             <Pricing />
           </motion.section>
 
